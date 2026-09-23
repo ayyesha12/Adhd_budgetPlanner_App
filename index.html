@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f8f7fa" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="ADHD Budget Planner" />
+<meta name="description" content="ADHD Budget Planner — a calm, low-setup budgeting app. One honest number: what's safe to spend today, with bills already set aside." />
+<title>ADHD Budget Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Soft Spectrum (light) */
+  --desk:#eae8f1; --bg:#f8f7fa; --card:#ffffff;
+  --ink:#27242d; --ink-display:#211e27; --ink-soft:#494451; --ink-muted:#696571; --ink-locked:#77717f;
+  --accent:#7659b0; --accent-hover:#624795; --accent-text:#654f87;
+  --accent-soft:#f2eefa; --accent-soft-deep:#e9e1f6; --avatar-bg:#ebe3f5; --brand-mark:#6655a4;
+  --positive:#47755c; --positive-fill:#568c70; --pill-positive-bg:#e3f2e8; --positive-label:#39654e;
+  --negative:#a84751; --danger-soft:#fbeceb;
+  --gold:#d4a53f;
+  --line:#e7e2ec; --line-card:#efebf3; --line-divider:#dad4e1; --line-rail:#d3cddd; --line-strong:#d9d3e1;
+  --grid-line:#e8e3ed; --cell-future:#ffffff; --cell-hover:#f7f3fc;
+  --rail-tab-fill:#f4f1fa;
+  /* category colours */
+  --cat-coffee-bg:#f8e5f0; --cat-coffee-dot:#d79fca; --cat-coffee-ink:#704461;
+  --cat-food-bg:#fbe9e1; --cat-food-dot:#e2aa91; --cat-food-ink:#764c3d;
+  --cat-fun-bg:#eee7fa; --cat-fun-dot:#b7a0df; --cat-fun-ink:#5e4a82;
+  --cat-gas-bg:#e3f2f7; --cat-gas-dot:#8fcbd8; --cat-gas-ink:#3f6573;
+  --cat-groceries-bg:#e5f4e9; --cat-groceries-dot:#8bc69f; --cat-groceries-ink:#3f684f;
+  --cat-other-bg:#e9eef9; --cat-other-dot:#a9bce5; --cat-other-ink:#4e5e7c;
+  /* rings */
+  --ring-bills:#d77f70; --ring-living:#8fcbd8; --ring-fun:#a88bd6; --ring-debt:#d4a53f;
+  --ring-saved:#68a983; --ring-remaining:#dbe2f1;
+  --dot-money-in:#68a983; --dot-must-pay:#d77f70;
+  /* months */
+  --month-jan:#e8b6ce; --month-feb:#f0bfa5; --month-mar:#bbddbd; --month-apr:#a9dadd;
+  --month-may:#efd58f; --month-jun:#e7a9be; --month-jul:#c8b7e8; --month-aug:#b5c8ed;
+  --month-sep:#9fd9cf; --month-oct:#edc88e; --month-nov:#dfa8d1; --month-dec:#a9cfe5;
+  --month-current:#6c55a0; --month-current-ink:#ffffff;
+  /* type + shape */
+  --font-display:"Newsreader", Georgia, serif;
+  --font-ui:"Manrope", system-ui, sans-serif;
+  --r-card:16px; --r-control:12px; --r-pill:999px; --r-tab:11px; --r-tile:10px;
+  --shadow-card:0 1px 2px rgba(69,50,100,.05);
+  --shadow-hero:0 26px 50px -34px rgba(69,50,100,.5);
+  --shadow-accent:0 10px 18px -10px rgba(118,89,176,.58);
+  --grad-hero:linear-gradient(145deg,#efeafa 0%,#f6eef4 55%,#eef3ee 100%);
+}
+:root[data-theme="dark"], html[data-theme="dark"]{
+  --desk:#070e18; --bg:#0d1724; --card:#172230;
+  --ink:#f6f3f0; --ink-display:#f6f3f0; --ink-soft:#d7d9e1; --ink-muted:#b9bec7; --ink-locked:#8b93a0;
+  --accent:#b79af1; --accent-hover:#c8b1f5; --accent-text:#c3aef0;
+  --accent-soft:#1f2a3a; --accent-soft-deep:#243247; --avatar-bg:#26314a; --brand-mark:#7a67c4;
+  --positive:#9de2bc; --positive-fill:#72be95; --pill-positive-bg:#1c392d; --positive-label:#9de2bc;
+  --negative:#f09a9f; --danger-soft:#3a1f24;
+  --line:#334150; --line-card:#2b3846; --line-divider:#2b3846; --line-rail:#2b3846; --line-strong:#3a4a5b;
+  --grid-line:#243140; --cell-future:#131f2c; --cell-hover:#1b2735; --rail-tab-fill:#131f2c;
+  --cat-coffee-bg:#3a2130; --cat-coffee-dot:#d79fca; --cat-coffee-ink:#f0cfe2;
+  --cat-food-bg:#3a2620; --cat-food-dot:#e2aa91; --cat-food-ink:#f2cdbc;
+  --cat-fun-bg:#2a2340; --cat-fun-dot:#b7a0df; --cat-fun-ink:#d8c9f2;
+  --cat-gas-bg:#123039; --cat-gas-dot:#8fcbd8; --cat-gas-ink:#bfe8f0;
+  --cat-groceries-bg:#1c392d; --cat-groceries-dot:#8bc69f; --cat-groceries-ink:#c5f0d7;
+  --cat-other-bg:#1e2b45; --cat-other-dot:#a9bce5; --cat-other-ink:#cdd9f2;
+  --ring-remaining:#2b3a4d;
+  --month-current:#8b72ce; --month-sep:#397064;
+  --grad-hero:linear-gradient(145deg,#1c2740 0%,#22253a 55%,#16302a 100%);
+  --shadow-hero:0 26px 50px -34px rgba(0,0,0,.6);
+  --shadow-card:0 1px 2px rgba(0,0,0,.3);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --desk:#070e18; --bg:#0d1724; --card:#172230;
+    --ink:#f6f3f0; --ink-display:#f6f3f0; --ink-soft:#d7d9e1; --ink-muted:#b9bec7; --ink-locked:#8b93a0;
+    --accent:#b79af1; --accent-hover:#c8b1f5; --accent-text:#c3aef0;
+    --accent-soft:#1f2a3a; --accent-soft-deep:#243247; --avatar-bg:#26314a; --brand-mark:#7a67c4;
+    --positive:#9de2bc; --positive-fill:#72be95; --pill-positive-bg:#1c392d; --positive-label:#9de2bc;
+    --negative:#f09a9f; --danger-soft:#3a1f24;
+    --line:#334150; --line-card:#2b3846; --line-divider:#2b3846; --line-rail:#2b3846; --line-strong:#3a4a5b;
+    --grid-line:#243140; --cell-future:#131f2c; --cell-hover:#1b2735; --rail-tab-fill:#131f2c;
+    --cat-coffee-bg:#3a2130; --cat-coffee-ink:#f0cfe2; --cat-food-bg:#3a2620; --cat-food-ink:#f2cdbc;
+    --cat-fun-bg:#2a2340; --cat-fun-ink:#d8c9f2; --cat-gas-bg:#123039; --cat-gas-ink:#bfe8f0;
+    --cat-groceries-bg:#1c392d; --cat-groceries-ink:#c5f0d7; --cat-other-bg:#1e2b45; --cat-other-ink:#cdd9f2;
+    --ring-remaining:#2b3a4d; --month-current:#8b72ce; --month-sep:#397064;
+    --grad-hero:linear-gradient(145deg,#1c2740 0%,#22253a 55%,#16302a 100%);
+    --shadow-hero:0 26px 50px -34px rgba(0,0,0,.6); --shadow-card:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{background:var(--desk);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;transition:background .25s,color .25s;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:var(--card);
+  border:1.5px solid var(--line-strong);border-radius:var(--r-control);padding:12px 14px;width:100%;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(118,89,176,.16);}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:9px;}
+.disp{font-family:var(--font-display);}
+.serif-it{font-family:var(--font-display);font-style:italic;color:var(--accent-text);}
+svg{display:block;}
+
+/* frame */
+#app{max-width:1240px;margin:0 auto;min-height:100vh;background:var(--bg);display:flex;position:relative;}
+.rail-l{flex:0 0 208px;border-right:1.5px solid var(--line-rail);padding:22px 14px 18px;display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;}
+.brand{display:flex;align-items:center;gap:10px;margin:0 6px 22px;}
+.brand .mk{width:34px;height:34px;border-radius:9px;background:var(--brand-mark);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:600;font-size:19px;flex:0 0 auto;}
+.brand .nm{font-family:var(--font-display);font-weight:600;font-size:15px;line-height:1.15;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);}
+.navitem{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r-tab);color:var(--ink-soft);font-weight:500;font-size:14.5px;width:100%;text-align:left;margin-bottom:2px;}
+.navitem:hover{background:var(--rail-tab-fill);}
+.navitem.on{background:var(--accent-soft);color:var(--accent-text);font-weight:600;box-shadow:inset 0 0 0 1.5px var(--accent-soft-deep);}
+.navitem .ic{width:18px;height:18px;flex:0 0 auto;opacity:.9;}
+.rail-l .spacer{flex:1;min-height:14px;}
+.logbtn{background:var(--accent-soft);color:var(--accent-text);border:1.5px solid var(--accent-soft-deep);border-radius:var(--r-pill);
+  padding:11px 0;font-weight:600;font-size:14px;width:100%;margin:6px 0 14px;}
+.logbtn:hover{background:var(--accent-soft-deep);}
+.mini-h{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-muted);font-weight:600;display:flex;justify-content:space-between;margin:0 4px 8px;}
+.mini-goal{margin:0 4px 12px;}
+.mini-goal .top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-bottom:5px;}
+.mini-goal .top b{font-weight:600;}
+.mini-goal .sub{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-muted);margin-top:5px;}
+
+/* main */
+.main{flex:1;min-width:0;padding:0 0 60px;}
+.banner{background:#fdf3d0;border-bottom:1px solid #f0e2ad;padding:12px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  font-size:13.5px;color:#5f5326;}
+.banner .msg b{color:#4a4018;font-weight:700;}
+.banner .acts{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.banner .acts .b1{background:var(--accent);color:#fff;border-radius:var(--r-pill);padding:9px 16px;font-weight:600;font-size:13px;}
+.banner .acts .b2{background:#fff;border:1px solid #ece0b4;border-radius:var(--r-pill);padding:9px 16px;font-weight:600;font-size:13px;color:#5a4e22;}
+.banner .x{margin-left:6px;color:#8a7a3c;padding:4px;}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:26px 30px 6px;flex-wrap:wrap;}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);font-weight:600;margin-bottom:4px;}
+.h1{font-family:var(--font-display);font-weight:500;font-size:40px;line-height:1.05;letter-spacing:-.01em;color:var(--ink-display);}
+.h1 .q{font-size:.4em;vertical-align:middle;}
+.subhead{color:var(--ink-muted);font-size:14.5px;margin-top:6px;}
+.head-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.qa{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--line-strong);border-radius:var(--r-control);
+  padding:9px 12px;font-size:13.5px;color:var(--ink-soft);font-weight:500;}
+.qa kbd{font-family:var(--font-ui);font-size:11px;background:var(--rail-tab-fill);border:1px solid var(--line-strong);border-radius:6px;padding:2px 6px;color:var(--ink-muted);}
+.help-toggle{width:34px;height:34px;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;
+  background:var(--accent-soft);color:var(--accent-text);font-weight:700;border:1.5px solid var(--accent-soft-deep);font-size:15px;}
+.help-toggle.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+.theme-toggle{width:34px;height:34px;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;background:var(--card);border:1.5px solid var(--line-strong);color:var(--ink-soft);transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease,background .16s ease,color .16s ease;}
+.theme-toggle:hover{transform:translateY(-2px) scale(1.06);box-shadow:0 8px 16px -8px rgba(69,50,100,.35);color:var(--accent-text);border-color:var(--accent);}
+.focus-tog{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft);}
+.switch{width:38px;height:22px;border-radius:999px;background:var(--line-strong);position:relative;transition:background .2s;flex:0 0 auto;}
+.switch.on{background:var(--accent);}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;}
+.switch.on i{transform:translateX(16px);}
+.btn{background:var(--accent);color:#fff;border-radius:var(--r-control);padding:11px 18px;font-weight:600;font-size:14.5px;
+  box-shadow:var(--shadow-accent);display:inline-flex;align-items:center;gap:8px;}
+.btn:hover{background:var(--accent-hover);}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:1.5px solid var(--line-strong);box-shadow:none;}
+.btn.ghost:hover{background:var(--rail-tab-fill);}
+.btn.block{width:100%;justify-content:center;}
+.btn.sm{padding:8px 13px;font-size:13px;}
+.btn:disabled{background:var(--line-strong);color:var(--ink-muted);box-shadow:none;cursor:default;}
+
+.wrap{padding:18px 30px 0;}
+.card{background:var(--card);border:1.5px solid var(--line-card);border-radius:var(--r-card);padding:20px 22px;box-shadow:var(--shadow-card);margin-bottom:18px;}
+.card.pad0{padding:0;overflow:hidden;}
+.sec-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.sec-l{display:flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-muted);font-weight:600;}
+.sec-r{font-size:13px;color:var(--ink-muted);}
+.qm{width:18px;height:18px;border-radius:50%;background:var(--rail-tab-fill);border:1px solid var(--line-strong);color:var(--ink-muted);
+  font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.help-note{display:none;font-family:var(--font-display);font-style:italic;color:var(--accent-text);font-size:14px;margin:-6px 0 14px;line-height:1.5;}
+body.help-on .help-note{display:block;}
+body.help-on .qm{background:var(--accent);color:#fff;border-color:var(--accent);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.tile{background:var(--card);border:1.5px solid var(--line-card);border-radius:var(--r-tile);padding:15px 16px;}
+.tile .k{font-size:12.5px;color:var(--ink-muted);margin-bottom:5px;}
+.tile .v{font-family:var(--font-display);font-size:26px;font-weight:500;letter-spacing:-.01em;}
+.tile .s{font-size:12px;color:var(--ink-muted);margin-top:5px;}
+.muted{color:var(--ink-muted);} .soft{color:var(--ink-soft);}
+.pos{color:var(--positive);} .neg{color:var(--negative);}
+.bar{height:9px;background:var(--ring-remaining);border-radius:999px;overflow:hidden;}
+.bar>i{display:block;height:100%;border-radius:999px;background:var(--accent);transition:width .4s;}
+.row{display:flex;gap:10px;} .wrapr{flex-wrap:wrap;}
+.listrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line-card);}
+.listrow:last-child{border-bottom:none;}
+.datechip{width:44px;height:44px;border-radius:10px;background:var(--rail-tab-fill);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto;}
+.datechip .d{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1;}
+.datechip .m{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-top:2px;}
+.del{color:var(--ink-muted);padding:6px;border-radius:8px;} .del:hover{color:var(--negative);background:var(--danger-soft);}
+.chip{border-radius:var(--r-pill);padding:9px 15px;font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;}
+.pill{border:1.5px solid var(--line-strong);border-radius:var(--r-pill);padding:8px 16px;font-weight:600;font-size:13.5px;color:var(--ink-muted);background:var(--card);}
+.pill.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-text);}
+.eb{background:var(--pill-positive-bg);color:var(--positive-label);border-radius:var(--r-pill);padding:4px 11px;font-size:12px;font-weight:600;display:inline-block;}
+.iconbtn{background:var(--accent);color:#fff;border-radius:var(--r-control);padding:0 15px;display:flex;align-items:center;box-shadow:var(--shadow-accent);}
+
+/* hero */
+.hero{background:var(--grad-hero);border:1.5px solid var(--line-card);border-radius:var(--r-card);padding:26px 26px 24px;box-shadow:var(--shadow-hero);margin-bottom:18px;}
+.hero .big{font-family:var(--font-display);font-weight:500;font-size:74px;line-height:.95;letter-spacing:-.02em;}
+.hero .big .cur{font-size:.5em;vertical-align:top;color:var(--ink-muted);margin-right:2px;}
+.hero .lead{font-family:var(--font-display);font-style:italic;font-size:16px;color:var(--accent-text);margin-top:12px;line-height:1.5;}
+.hero .worked{margin-top:10px;color:var(--accent-text);font-size:13.5px;text-decoration:underline;text-underline-offset:3px;}
+.hero .track{margin-top:16px;} .hero .track small{color:var(--ink-muted);font-size:12.5px;display:block;margin-top:7px;}
+.qadd{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+
+/* coaching / three things */
+.coach{background:#1c1626;color:#efe9f6;border-radius:var(--r-card);padding:18px 22px;display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+.coach .n{width:38px;height:38px;border-radius:50%;background:#2e2440;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;flex:0 0 auto;}
+.coach .t small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b9a7d6;font-weight:600;display:block;margin-bottom:3px;}
+.coach .t b{font-family:var(--font-display);font-weight:500;font-size:21px;}
+.coach .r{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.coach .badge{background:#2e2440;border-radius:999px;padding:5px 11px;font-size:12px;color:#cbb9e6;}
+.coach .go{background:#efe9f6;color:#2a1f3a;border-radius:var(--r-control);padding:9px 15px;font-weight:600;font-size:13.5px;}
+.tick{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line-card);}
+.tick:last-child{border-bottom:none;}
+.tick .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--line-strong);flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
+.tick .box.done{background:var(--positive-fill);border-color:var(--positive-fill);color:#fff;}
+.tick .lbl{flex:1;font-size:14.5px;} .tick.done .lbl{color:var(--ink-muted);text-decoration:line-through;}
+.tick .t{font-size:12px;color:var(--ink-muted);}
+
+/* donut + legend */
+.donut-wrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.legend{flex:1;min-width:220px;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+.legend .li{display:flex;flex-direction:column;gap:2px;}
+.legend .li .nm{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);}
+.legend .li .nm i{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+.legend .li .am{font-family:var(--font-display);font-size:16px;font-weight:500;padding-left:16px;}
+
+/* calendar */
+.cal{border:1.5px solid var(--line-card);border-radius:var(--r-card);overflow:hidden;background:var(--card);}
+.cal .dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--rail-tab-fill);}
+.cal .dow div{padding:10px 12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);font-weight:600;border-right:1px solid var(--grid-line);}
+.cal .dow div:last-child{border-right:none;}
+.cal .grid{display:grid;grid-template-columns:repeat(7,1fr);}
+.cell{min-height:78px;border-right:1px solid var(--grid-line);border-top:1px solid var(--grid-line);padding:8px 9px;background:var(--cell-future);position:relative;}
+.cell:nth-child(7n){border-right:none;}
+.cell .num{font-size:12.5px;color:var(--ink-muted);}
+.cell.today{box-shadow:inset 0 0 0 2px var(--accent);}
+.cell.today .num{color:var(--accent-text);font-weight:700;}
+.cell.blank{background:transparent;}
+.evt{display:inline-block;margin-top:6px;font-size:11px;padding:3px 7px;border-radius:6px;font-weight:600;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.evt.pay{background:var(--pill-positive-bg);color:var(--positive-label);}
+.evt.bill{background:var(--cat-food-bg);color:var(--cat-food-ink);}
+.callegend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-muted);}
+.callegend span{display:flex;align-items:center;gap:6px;} .callegend i{width:9px;height:9px;border-radius:50%;}
+
+/* daybars */
+.daybars{display:flex;gap:3px;align-items:flex-end;height:64px;}
+.daybars > i{flex:1;background:var(--accent-soft-deep);border-radius:3px 3px 0 0;min-height:6px;}
+.daybars > i.today{background:var(--accent);}
+.axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-muted);margin-top:7px;}
+.strip{display:flex;gap:4px;} .strip > i{flex:1;height:36px;border-radius:5px;background:var(--accent-soft-deep);}
+.strip > i.past{background:var(--accent-soft);} .strip > i.today{background:var(--accent);} .strip > i.pay{background:var(--positive-fill);}
+
+/* ring svg */
+.ring{width:112px;height:112px;flex:0 0 auto;position:relative;}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;font-weight:500;}
+
+/* month rail */
+.rail-r{flex:0 0 60px;border-left:1.5px solid var(--line-rail);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;
+  padding:9px 7px;gap:5px;background:linear-gradient(180deg,var(--bg),var(--desk));}
+.mtab{flex:1;position:relative;writing-mode:vertical-rl;text-orientation:mixed;display:flex;align-items:center;justify-content:center;
+  border-radius:13px;font-size:12px;letter-spacing:.2em;font-weight:700;color:#4d4661;cursor:pointer;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
+  transition:transform .24s cubic-bezier(.2,.7,.3,1.3),box-shadow .24s ease,filter .24s ease;
+  animation:railIn .55s cubic-bezier(.2,.7,.3,1.3) backwards;}
+.mtab:hover{transform:translateX(-6px) scale(1.05);filter:brightness(1.05) saturate(1.18);
+  box-shadow:-9px 0 22px -8px rgba(69,50,100,.48),inset 0 0 0 1px rgba(255,255,255,.45);z-index:6;}
+.mtab:active{transform:translateX(-2px) scale(.98);}
+.mtab.cur{color:var(--month-current-ink);box-shadow:0 6px 16px -7px rgba(108,85,160,.75);
+  animation:railIn .55s cubic-bezier(.2,.7,.3,1.3) backwards,curGlow 2.6s ease-in-out infinite .6s;}
+.mtab .fly{position:absolute;right:calc(100% + 11px);top:50%;writing-mode:horizontal-tb;white-space:nowrap;
+  background:#1c1626;color:#fff;padding:8px 13px;border-radius:11px;font-size:12.5px;letter-spacing:.02em;font-weight:600;
+  opacity:0;pointer-events:none;box-shadow:0 14px 28px -10px rgba(0,0,0,.55);
+  transform:translateY(-50%) translateX(12px);transition:opacity .18s ease,transform .22s cubic-bezier(.2,.7,.3,1.3);}
+.mtab .fly::after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#1c1626;}
+.mtab:hover .fly{opacity:1;transform:translateY(-50%) translateX(0);}
+@keyframes railIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes curGlow{0%,100%{box-shadow:0 6px 16px -7px rgba(108,85,160,.75),0 0 0 0 rgba(108,85,160,.5)}50%{box-shadow:0 6px 16px -7px rgba(108,85,160,.75),0 0 0 6px rgba(108,85,160,0)}}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(24,20,35,.5);display:none;align-items:flex-start;justify-content:center;z-index:60;padding-top:12vh;}
+/* welcome tour */
+.tour-scrim{position:fixed;inset:0;background:rgba(24,20,35,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:20px;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.tour-card{background:var(--card);border:1.5px solid var(--line-card);border-radius:22px;width:min(440px,94vw);padding:30px 28px 24px;position:relative;
+  box-shadow:0 40px 80px -30px rgba(30,24,45,.6);text-align:center;animation:pop .28s cubic-bezier(.2,.9,.3,1.2);}
+@keyframes pop{from{transform:scale(.94);opacity:.4}to{transform:scale(1);opacity:1}}
+.tour-x{position:absolute;top:16px;right:18px;font-size:13.5px;font-weight:600;color:var(--ink-muted);padding:4px 6px;}
+.tour-x:hover{color:var(--accent-text);}
+.tour-ic{width:88px;height:88px;margin:6px auto 18px;border-radius:24px;background:var(--accent-soft);color:var(--accent-text);display:flex;align-items:center;justify-content:center;}
+.tour-eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);font-weight:700;margin-bottom:10px;}
+.tour-card h2{font-family:var(--font-display);font-weight:500;font-size:27px;line-height:1.12;margin-bottom:12px;color:var(--ink-display);}
+.tour-card p{font-size:15.5px;line-height:1.55;color:var(--ink-muted);margin-bottom:22px;}
+.tour-card p b{color:var(--ink-soft);}
+.tour-dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
+.tour-dots i{width:8px;height:8px;border-radius:50%;background:var(--line-strong);transition:all .2s;}
+.tour-dots i.on{background:var(--accent);width:22px;border-radius:6px;}
+.tour-nav{display:flex;gap:10px;}
+.tour-nav .btn{flex:1;justify-content:center;}
+.tour-demo{background:var(--pill-positive-bg);color:var(--positive-label);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:600;margin-bottom:20px;}
+/* demo badge in header */
+.demo-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold);color:#3a2c08;border-radius:var(--r-pill);padding:9px 15px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 8px 16px -10px rgba(200,150,40,.8);transition:transform .16s ease,box-shadow .16s ease;}
+.demo-badge:hover{transform:translateY(-2px);box-shadow:0 12px 20px -10px rgba(200,150,40,.9);}
+.scrim.on{display:flex;}
+.palette{background:var(--card);border:1.5px solid var(--line-strong);border-radius:16px;width:min(560px,92vw);box-shadow:0 30px 60px -20px rgba(30,24,45,.5);overflow:hidden;}
+.palette input{border:none;border-bottom:1.5px solid var(--line-card);border-radius:0;font-size:18px;padding:18px 20px;}
+.palette input:focus{box-shadow:none;}
+.palette .hint{padding:12px 20px;font-size:13px;color:var(--ink-muted);border-top:1px solid var(--line-card);}
+.palette .hint b{color:var(--ink-soft);}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#1c1626;color:#fff;padding:12px 20px;border-radius:var(--r-pill);
+  font-size:14px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:70;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+/* onboarding */
+.ob{max-width:520px;margin:0 auto;padding:40px 24px 60px;min-height:100vh;display:flex;flex-direction:column;}
+.ob .prog{display:flex;gap:6px;margin-bottom:34px;} .ob .prog i{height:4px;flex:1;border-radius:4px;background:var(--line-strong);} .ob .prog i.on{background:var(--accent);}
+.ob .step{flex:1;}
+.ob .eyebrow2{color:var(--accent-text);font-weight:600;font-size:13px;margin-bottom:10px;}
+.ob h2{font-family:var(--font-display);font-weight:500;font-size:30px;line-height:1.15;margin-bottom:12px;}
+.ob p{color:var(--ink-muted);font-size:15px;line-height:1.55;margin-bottom:26px;}
+.ob .bigin{background:var(--card);border:1.5px solid var(--line-strong);border-radius:16px;display:flex;align-items:center;gap:8px;padding:6px 18px;}
+.ob .bigin span{font-family:var(--font-display);font-size:30px;color:var(--ink-muted);}
+.ob .bigin input{border:none;background:none;font-family:var(--font-display);font-size:36px;font-weight:500;padding:8px 0;}
+.ob .bigin input:focus{box-shadow:none;}
+.ob .navr{display:flex;gap:10px;margin-top:24px;}
+.ob .skip{margin-top:16px;color:var(--ink-muted);font-size:14px;text-decoration:underline;align-self:center;}
+
+/* mobile */
+.mobnav{display:none;}
+.mobmonths{display:none;}
+@media (max-width:900px){
+  #app{flex-direction:column;}
+  .rail-l{position:static;height:auto;flex-basis:auto;flex-direction:row;align-items:center;overflow-x:auto;border-right:none;border-bottom:1.5px solid var(--line-rail);padding:12px 14px;gap:6px;}
+  .rail-l .brand{margin:0 12px 0 0;} .rail-l .navdesk,.rail-l .spacer,.rail-l .logbtn,.rail-l .miniwrap{display:none;}
+  .rail-r{display:none;}
+  .head{padding:20px 18px 4px;} .h1{font-size:31px;} .wrap{padding:14px 16px 0;}
+  .banner{padding:12px 16px;} .grid2,.grid3{grid-template-columns:1fr;}
+  .mobnav{display:flex;position:sticky;bottom:0;background:var(--card);border-top:1.5px solid var(--line-rail);z-index:40;overflow-x:auto;}
+  .mobnav button{flex:0 0 auto;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink-muted);min-width:64px;}
+  .mobnav button.on{color:var(--accent-text);}
+  .mobmonths{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;background:var(--bg);border-bottom:1.5px solid var(--line-rail);position:sticky;top:0;z-index:30;scrollbar-width:none;}
+  .mobmonths::-webkit-scrollbar{display:none;}
+  .mchip{flex:0 0 auto;border-radius:11px;padding:9px 15px;font-size:13px;font-weight:700;letter-spacing:.08em;color:#4d4661;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);transition:transform .15s ease;cursor:pointer;}
+  .mchip.cur{color:var(--month-current-ink);box-shadow:0 5px 12px -5px rgba(108,85,160,.7);}
+  .mchip:active{transform:scale(.94);}
+  .hero .big{font-size:56px;}
+}
+
+/* ============ visual polish: hovering icons + elevated buttons ============ */
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes softPulse{0%,100%{box-shadow:0 0 0 0 rgba(118,89,176,.35)}50%{box-shadow:0 0 0 6px rgba(118,89,176,0)}}
+
+/* elevated primary buttons — raised at rest, lift on hover, press down on click */
+.btn{box-shadow:0 6px 14px -6px rgba(118,89,176,.55),0 2px 4px -2px rgba(118,89,176,.35);
+  transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease,background .16s ease;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 24px -8px rgba(118,89,176,.6),0 4px 8px -4px rgba(118,89,176,.45);}
+.btn:active{transform:translateY(0) scale(.98);box-shadow:0 4px 10px -6px rgba(118,89,176,.5);}
+.btn svg{transition:transform .18s ease;}
+.btn:hover svg{transform:translateX(2px) scale(1.08);}
+.btn.ghost{box-shadow:0 2px 8px -5px rgba(69,50,100,.35);}
+.btn.ghost:hover{transform:translateY(-2px);box-shadow:0 10px 18px -10px rgba(69,50,100,.38);}
+
+/* icon add-buttons: lift + spin the plus */
+.iconbtn{box-shadow:0 6px 14px -6px rgba(118,89,176,.55);transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease,background .16s ease;}
+.iconbtn:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 14px 24px -8px rgba(118,89,176,.6);}
+.iconbtn:active{transform:translateY(0) scale(.95);}
+.iconbtn svg{transition:transform .3s cubic-bezier(.2,.7,.3,1.3);}
+.iconbtn:hover svg{transform:rotate(90deg) scale(1.05);}
+
+/* nav icons hover-lift; the active icon gently floats */
+.navitem{transition:background .16s ease,transform .16s ease,box-shadow .16s ease;}
+.navitem:hover{transform:translateX(2px);}
+.navitem .ic{transition:transform .2s cubic-bezier(.2,.7,.3,1.3),opacity .2s ease;}
+.navitem:hover .ic{transform:translateY(-2px) scale(1.14);opacity:1;}
+.navitem.on{box-shadow:inset 0 0 0 1.5px var(--accent-soft-deep),0 6px 16px -12px rgba(118,89,176,.6);}
+.navitem.on .ic{animation:iconFloat 3.2s ease-in-out infinite;}
+.mobnav button svg{transition:transform .18s cubic-bezier(.2,.7,.3,1.3);}
+.mobnav button:hover svg,.mobnav button.on svg{transform:translateY(-2px) scale(1.12);}
+
+/* sidebar log-a-spend button */
+.logbtn{transition:transform .16s ease,box-shadow .16s ease,background .16s ease;box-shadow:0 4px 10px -6px rgba(118,89,176,.4);}
+.logbtn:hover{transform:translateY(-2px);box-shadow:0 12px 20px -10px rgba(118,89,176,.5);}
+.logbtn:active{transform:translateY(0) scale(.98);}
+
+/* quick actions + help toggle */
+.qa{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;}
+.qa:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 16px -10px rgba(69,50,100,.35);}
+.qa svg{transition:transform .18s ease;} .qa:hover svg{transform:scale(1.14);}
+.help-toggle{transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease,background .16s ease;}
+.help-toggle:hover{transform:translateY(-2px) rotate(-8deg) scale(1.06);box-shadow:0 8px 16px -8px rgba(118,89,176,.5);}
+.help-toggle.on{animation:softPulse 2.4s ease-in-out infinite;}
+
+/* quick-add chips + pills lift off the surface */
+.chip{cursor:pointer;transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease,filter .16s ease;}
+.chip:hover{transform:translateY(-3px);box-shadow:0 10px 18px -10px rgba(69,50,100,.4);filter:brightness(1.03);}
+.chip:active{transform:translateY(-1px) scale(.97);}
+.pill{transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease,background .15s ease,color .15s ease;}
+.pill:not(.on):hover{transform:translateY(-2px);border-color:var(--accent);color:var(--accent-text);box-shadow:0 7px 14px -9px rgba(69,50,100,.35);}
+
+/* cards + tiles gain depth on hover */
+.card{transition:box-shadow .22s ease,border-color .22s ease,transform .22s ease;}
+.card:hover{box-shadow:0 16px 34px -20px rgba(69,50,100,.3);border-color:var(--line-strong);}
+.tile{transition:transform .16s cubic-bezier(.2,.7,.3,1.3),box-shadow .16s ease;}
+.tile:hover{transform:translateY(-3px);box-shadow:0 14px 26px -16px rgba(69,50,100,.38);}
+.hero{transition:box-shadow .25s ease,transform .25s ease;}
+.hero:hover{transform:translateY(-2px);}
+
+/* section “?” chips give a little pop */
+.qm{transition:transform .16s cubic-bezier(.2,.7,.3,1.3),background .16s ease,color .16s ease;}
+.sec-h:hover .qm,.qm:hover{transform:scale(1.18);}
+
+/* list rows highlight + delete/date icons react */
+.listrow{transition:background .15s ease;border-radius:8px;}
+.listrow:hover{background:var(--rail-tab-fill);}
+.del{transition:transform .15s cubic-bezier(.2,.7,.3,1.3),color .15s ease,background .15s ease;}
+.del:hover{transform:scale(1.18);}
+.datechip{transition:transform .16s ease,box-shadow .16s ease;}
+.listrow:hover .datechip{transform:scale(1.06);box-shadow:0 6px 12px -8px rgba(69,50,100,.35);}
+
+/* coaching card + its number */
+.coach .go{transition:transform .16s ease,box-shadow .16s ease;box-shadow:0 6px 14px -8px rgba(0,0,0,.4);}
+.coach .go:hover{transform:translateY(-2px);box-shadow:0 12px 20px -10px rgba(0,0,0,.5);}
+.coach .n{animation:iconFloat 3.4s ease-in-out infinite;}
+
+/* month rail tabs — redesigned in the base .rail-r / .mtab rules above */
+
+/* worked-out link + toggle switch */
+.hero .worked{transition:color .15s ease,transform .15s ease;display:inline-block;}
+.hero .worked:hover{transform:translateX(2px);color:var(--accent);}
+.switch{transition:background .2s ease,box-shadow .2s ease;}
+.switch:hover{box-shadow:0 0 0 4px rgba(118,89,176,.14);}
+
+/* respect users who prefer less motion */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;}
+  .btn,.iconbtn,.chip,.pill,.tile,.hero,.navitem,.qa,.logbtn,.help-toggle,.card,.del,.listrow,.mtab{transition:none!important;transform:none!important;}
+  .mtab:hover{transform:none!important;} .mtab .fly{transition:opacity .15s ease!important;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="scrim" id="scrim"><div class="palette"><input id="pal-in" placeholder="Type a screen, or “12 coffee” to log a spend…" autocomplete="off"><div class="hint">Try <b>“40 groceries”</b> to log, or type <b>today</b>, <b>bills</b>, <b>goals</b>… · <b>Esc</b> to close</div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ icons ============ */
+const ICON=(d,s)=>`<svg class="ic" width="${s||18}" height="${s||18}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const IC={
+  today:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>',
+  planner:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  bills:'<path d="M5 3h14v18l-2-1.2L15 21l-2-1.2L11 21 9 19.8 7 21 5 19.8Z"/><path d="M9 8h6M9 12h6"/>',
+  income:'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/>',
+  goals:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+  debt:'<path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/>',
+  envelopes:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  milestones:'<path d="M5 21V4M5 4h11l-2 3 2 3H5"/>',
+  settings:'<path d="M4 6h11M4 12h7M4 18h13"/><circle cx="18" cy="6" r="2"/><circle cx="14" cy="12" r="2"/><circle cx="19" cy="18" r="2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  trash:'<path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+  qa:'<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>', left:'<path d="M15 6l-6 6 6 6"/>', check:'<path d="M20 6L9 17l-5-5"/>',
+  download:'<path d="M12 3v12M8 11l4 4 4-4M4 21h16"/>', spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  sun:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+  moon:'<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z"/>',
+};
+const nav=(k)=>ICON(IC[k],18);
+
+/* ============ build flag ============ */
+/* DEMO = false  → full app (paid). DEMO = true → free demo (limited). */
+const DEMO = false;
+const UPGRADE_URL = 'https://YOURNAME.github.io/adhd-budget-planner/'; /* TODO: your paid full-app / Etsy link */
+const DEMO_LIMITS = {spends:12, bills:4, income:3, envelopes:3, goals:2, debts:2, paychecks:3};
+
+/* ============ state ============ */
+const KEY = DEMO ? 'adhdBudgetPlanner_demo_v1' : 'adhdBudgetPlanner_v1';
+let mem=null;
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null;}catch(e){return mem;}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){mem=JSON.parse(JSON.stringify(S));}}
+const DAY=864e5;
+const midnight=()=>{const d=new Date();d.setHours(0,0,0,0);return d;};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
+const isoD=(d)=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');};
+const parseD=(s)=>new Date(s+'T00:00:00');
+const uid=()=>Date.now()+Math.floor(Math.random()*99999);
+
+const defaultState=()=>({
+  onboarded:false, ob:0, tab:'today', example:false, bannerHidden:false,
+  help:false, focus:false, showCalc:false, milestoneFilter:'all', payMode:'multi',
+  viewMonth:isoD(new Date(new Date().getFullYear(),new Date().getMonth(),1)),
+  profile:{name:'', title:'ADHD Budget Planner', checking:'', setAside:0, currency:'$'},
+  paychecks:[], bills:[], income:[], envelopes:[], goals:[], debts:[], spends:[], notes:[],
+  threeThings:{logged:false, balanceSet:false, underToday:false},
+  tourStep:0, tourDone:false,
+});
+let S=load()||exampleState();
+
+/* ============ example data (mirrors the demo scenario) ============ */
+function exampleState(){
+  const t=midnight();
+  const payday=addDays(t,6);            // "6 days to payday"
+  const s=defaultState();
+  Object.assign(s,{onboarded:true, example:true, tab:'today',
+    profile:{name:'Alex', title:'ADHD Budget Planner', checking:2500, setAside:307, currency:'$'},
+    paychecks:[
+      {id:uid(),name:'Your pay',amount:2300,freq:'biweekly',anchor:isoD(payday)},
+      {id:uid(),name:'Alex — pay',amount:1600,freq:'monthly',anchor:isoD(addDays(t,29))},
+    ],
+    bills:[
+      {id:uid(),name:'Rent',amount:780,freq:'monthly',dueDom:1,paid:false},
+      {id:uid(),name:'Phone',amount:29,freq:'monthly',dueDom:4,paid:false},
+      {id:uid(),name:'Internet',amount:65,freq:'monthly',dueDom:18,paid:false},
+    ],
+    income:[],
+    envelopes:[
+      {id:uid(),name:'Food',cap:400,spent:0,cat:'groceries'},
+      {id:uid(),name:'Fun',cap:120,spent:0,cat:'fun'},
+    ],
+    goals:[
+      {id:uid(),name:'Japan, next spring',target:3000,saved:1205,perMonth:85,reaches:'Jul 2028'},
+      {id:uid(),name:'Just-in-case fund',target:1000,saved:780,perMonth:50,reaches:'Feb 2027'},
+    ],
+    debts:[], spends:[{id:uid(),label:'Coffee',amount:29,cat:'coffee',ts:Date.now()}],
+    notes:[], threeThings:{logged:false, balanceSet:true, underToday:false},
+  });
+  return s;
+}
+
+/* ============ money + helpers ============ */
+const cur=()=>S.profile.currency||'$';
+function money(n,dp=2){n=Number(n)||0;const neg=n<0;const v=Math.abs(n).toLocaleString(undefined,{minimumFractionDigits:dp,maximumFractionDigits:dp});return (neg?'-':'')+cur()+v;}
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MON_FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const fmtShort=(d)=>DOW[d.getDay()]+' '+d.getDate()+' '+MON[d.getMonth()];
+const fmtDom=(d)=>String(d.getDate()).padStart(2,'0');
+
+function nextPay(pc,from){
+  const t=from||midnight();const anchor=pc.anchor?parseD(pc.anchor):t;
+  if(pc.freq==='weekly'){let d=new Date(anchor);while(d<t)d=addDays(d,7);return d;}
+  if(pc.freq==='biweekly'){let d=new Date(anchor);while(d<t)d=addDays(d,14);return d;}
+  if(pc.freq==='monthly'){const day=anchor.getDate();let d=new Date(t.getFullYear(),t.getMonth(),day);while(d<t)d=new Date(d.getFullYear(),d.getMonth()+1,day);return d;}
+  if(pc.freq==='twicemonthly'){const y=t.getFullYear(),m=t.getMonth();const c=[new Date(y,m,15),new Date(y,m+1,0),new Date(y,m+1,15)];return c.find(d=>d>=t)||c[0];}
+  return anchor>=t?anchor:null;
+}
+function nextBillDate(b,from){
+  const t=from||midnight();const dom=b.dueDom||1;
+  let d=new Date(t.getFullYear(),t.getMonth(),dom);while(d<t)d=new Date(d.getFullYear(),d.getMonth()+1,dom);return d;
+}
+function billMonthly(b){const a=+b.amount||0;return ({weekly:a*4.345,biweekly:a*2.1725,twicemonthly:a*2,monthly:a})[b.freq]??a;}
+
+function derive(){
+  const t=midnight();
+  const payDates=S.paychecks.map(p=>nextPay(p,t)).filter(Boolean);
+  const nextPayday=payDates.length?new Date(Math.min(...payDates.map(d=>+d))):null;
+  const daysToPay=nextPayday?Math.max(1,Math.round((nextPayday-t)/DAY)):null;
+  const billsMonthly=S.bills.reduce((s,b)=>s+billMonthly(b),0);
+  const billsStillToPay=S.bills.filter(b=>!b.paid).reduce((s,b)=>s+(+b.amount||0),0);
+  const billsPaid=S.bills.filter(b=>b.paid).reduce((s,b)=>s+(+b.amount||0),0);
+  const spentPeriod=S.spends.reduce((s,x)=>s+(+x.amount||0),0);
+  const checking=+S.profile.checking||0, setAside=+S.profile.setAside||0;
+  const pool=checking-setAside-billsStillToPay-spentPeriod;
+  const perDay=daysToPay?pool/daysToPay:pool;
+  const spentToday=S.spends.filter(x=>x.ts&&x.ts>=+t).reduce((s,x)=>s+(+x.amount||0),0);
+  const todayStart=perDay, todayLeft=perDay-spentToday;
+  const savedTotal=S.goals.reduce((s,g)=>s+(+g.saved||0),0);
+  const goalTarget=S.goals.reduce((s,g)=>s+(+g.target||0),0);
+  return {nextPayday,daysToPay,billsMonthly,billsStillToPay,billsPaid,spentPeriod,checking,setAside,pool,perDay,spentToday,todayStart,todayLeft,savedTotal,goalTarget};
+}
+function greeting(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening';}
+function set(patch){Object.assign(S,patch);persist();render();}
+
+/* ============ nav config ============ */
+const NAVS=[['today','Today'],['planner','Planner'],['bills','Bills'],['income','Money in'],['goals','Goals'],['debt','Debt'],['envelopes','Envelopes'],['milestones','Milestones'],['settings','Settings']];
+function LeftRail(){
+  const D=derive();
+  const goalsMini=S.goals.slice(0,2).map(g=>{const pct=g.target>0?Math.min(100,g.saved/g.target*100):0;
+    return `<div class="mini-goal"><div class="top"><b>${esc(g.name)}</b><span>${money(g.saved,0)} / ${money(g.target,0)}</span></div><div class="bar"><i style="width:${pct}%;background:var(--accent)"></i></div><div class="sub"><span>${money(Math.max(0,g.target-g.saved),0)} to go</span><span>${g.perMonth?money(g.perMonth,0)+' / month':''}</span></div></div>`;}).join('');
+  return `<aside class="rail-l">
+    <div class="brand"><div class="mk">A</div><div class="nm">ADHD Budget<br>Planner</div></div>
+    <div class="navdesk">${NAVS.map(([k,l])=>`<button class="navitem ${S.tab===k?'on':''}" data-a="tab" data-v="${k}">${nav(k)}<span>${l}</span></button>`).join('')}</div>
+    <button class="logbtn" data-a="tab" data-v="today" data-focuslog="1">Log a spend</button>
+    <div class="miniwrap">${S.goals.length?`<div class="mini-h"><span>Saving up for</span><span>${S.goals.length} goal${S.goals.length>1?'s':''}</span></div>${goalsMini}`:''}</div>
+    <div class="spacer"></div>
+  </aside>`;
+}
+function MonthRail(){
+  const now=new Date(),cm=now.getMonth();
+  return `<div class="rail-r">${MON.map((m,i)=>{const isc=i===cm;
+    return `<button class="mtab ${isc?'cur':''}" data-a="month" data-v="${i}" style="background:${isc?'var(--month-current)':'var(--month-'+m.toLowerCase()+')'};animation-delay:${(i*0.035).toFixed(3)}s"><span class="fly">${MON_FULL[i]}${isc?' · now':''} &rarr;</span>${m.toUpperCase()}</button>`;}).join('')}</div>`;
+}
+function MobNav(){return `<nav class="mobnav">${NAVS.map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-a="tab" data-v="${k}">${nav(k)}<span>${l}</span></button>`).join('')}</nav>`;}
+function MobMonthRail(){
+  const cm=new Date().getMonth();
+  return `<div class="mobmonths">${MON.map((m,i)=>{const isc=i===cm;
+    return `<button class="mchip ${isc?'cur':''}" data-a="month" data-v="${i}" style="background:${isc?'var(--month-current)':'var(--month-'+m.toLowerCase()+')'}">${m.toUpperCase()}</button>`;}).join('')}</div>`;
+}
+
+/* ============ shared header ============ */
+function Head(eyebrow,title,sub,actions){
+  return `<div class="head">
+    <div><div class="eyebrow">${eyebrow}</div><h1 class="h1">${title}</h1>${sub?`<div class="subhead">${sub}</div>`:''}</div>
+    <div class="head-r">
+      ${DEMO?`<a class="demo-badge" href="${UPGRADE_URL}" target="_blank" rel="noopener">✦ Get the full app</a>`:''}
+      <button class="qa" data-a="palette">${ICON(IC.qa,15)} Quick actions <kbd>Ctrl K</kbd></button>
+      <button class="theme-toggle" data-a="themetoggle" title="Light / dark mode" aria-label="Toggle light or dark mode">${(S.theme||'light')==='dark'?ICON(IC.sun,17):ICON(IC.moon,17)}</button>
+      <button class="help-toggle ${S.help?'on':''}" data-a="help" title="Help mode">?</button>
+      ${actions||''}
+    </div>
+  </div>`;
+}
+const qm=`<span class="qm">?</span>`;
+const helpNote=(t)=>`<div class="help-note">${t}</div>`;
+
+/* ============ welcome tour (Skip / Next) ============ */
+function tourSteps(){
+  const last = DEMO
+    ? {icon:'check', eyebrow:`You're set`, title:`Have a proper look around`, body:`This is the <b>free demo</b> — every screen works. Add a few of your own numbers to feel it. When you're ready for the unlimited version, tap <b>Get the full app</b> at the top.`, demo:true}
+    : {icon:'check', eyebrow:`You're set`, title:`It's yours, and private`, body:`No account, no password — everything saves on <b>your device</b>. Tip: in Settings, tap <b>Download a backup</b> now and then so you never lose your numbers.`};
+  return [
+    {icon:'today', eyebrow:`Welcome`, title:`One calm number`, body:`The big number on <b>Today</b> is what's <b>safe to spend right now</b> — your bills and set-aside money are already taken out.`},
+    {icon:'plus', eyebrow:`The daily habit`, title:`Log a spend in one tap`, body:`Tap a quick button (Coffee, Lunch, Bus) or type any amount. Your safe number updates instantly — no categories to keep up with.`},
+    {icon:'envelopes', eyebrow:`Only if you want it`, title:`Everything else is optional`, body:`Bills, paychecks, goals, debt and envelopes are all here — use the parts that help and ignore the rest. <b>Focus mode</b> hides everything but today.`},
+    last,
+  ];
+}
+function Tour(){
+  const steps=tourSteps(); const i=Math.min(S.tourStep||0, steps.length-1); const st=steps[i]; const last=i===steps.length-1;
+  return `<div class="tour-scrim"><div class="tour-card">
+    <button class="tour-x" data-a="tour-skip">Skip</button>
+    <div class="tour-ic">${ICON(IC[st.icon],40)}</div>
+    <div class="tour-eyebrow">${st.eyebrow}</div>
+    <h2>${st.title}</h2>
+    <p>${st.body}</p>
+    ${st.demo?`<div class="tour-demo">✦ Free demo — a taste of the full app</div>`:''}
+    <div class="tour-dots">${steps.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>
+    <div class="tour-nav">
+      ${i>0?`<button class="btn ghost" data-a="tour-back">Back</button>`:''}
+      <button class="btn" data-a="tour-next">${last?'Get started':'Next'}</button>
+    </div>
+  </div></div>`;
+}
+function demoBlocked(listKey){
+  if(!DEMO) return false;
+  const cap=DEMO_LIMITS[listKey]||99;
+  if((S[listKey]||[]).length>=cap){ toast('Demo limit reached — tap “Get the full app” to add more'); return true; }
+  return false;
+}
+
+/* ============ TODAY ============ */
+function Today(){
+  const D=derive();const t=midnight();
+  const pos=D.todayStart>=0;
+  const paydayStr=D.nextPayday?fmtShort(D.nextPayday):'—';
+  const tt=S.threeThings;const done=(tt.logged?1:0)+(tt.balanceSet?1:0)+(tt.underToday?1:0);
+  const quicks=[['Coffee',4,'coffee'],['Lunch',12,'food'],['Bus',6,'gas']];
+  const spendsHtml=S.spends.length===0
+    ?`<p class="serif-it" style="padding:6px 0">nothing logged yet — anything you add lands here.</p>`
+    :`<div>${S.spends.slice().reverse().map(s=>`<div class="listrow"><span style="display:flex;align-items:center;gap:10px"><i style="width:10px;height:10px;border-radius:50%;background:var(--cat-${s.cat||'other'}-dot)"></i>${esc(s.label)}</span><span style="display:flex;align-items:center;gap:10px"><b class="disp">${money(s.amount)}</b><button class="del" data-a="del-spend" data-v="${s.id}">${ICON(IC.trash,15)}</button></span></div>`).join('')}</div>`;
+
+  // coming up bills
+  const upcoming=S.bills.map(b=>({b,d:nextBillDate(b,t)})).sort((a,z)=>a.d-z.d).slice(0,4);
+  // month so far
+  const cameIn=S.paychecks.reduce((s,p)=>s+(+p.amount||0),0)+S.income.reduce((s,x)=>s+(+x.amount||0),0);
+  const wentOut=D.billsMonthly+D.spentPeriod;
+  const kept=Math.max(0,cameIn-wentOut);
+  const cats=[['Bills & rent',D.billsMonthly,'var(--ring-bills)'],['Living & food',S.spends.filter(s=>['food','groceries'].includes(s.cat)).reduce((a,b)=>a+b.amount,0),'var(--ring-living)'],['Fun & friends',S.spends.filter(s=>s.cat==='fun').reduce((a,b)=>a+b.amount,0),'var(--ring-fun)'],['To debt',0,'var(--ring-debt)'],['To savings',0,'var(--ring-saved)'],['Left over',kept,'var(--ring-remaining)']];
+  const donut=donutSVG([['bills',D.billsMonthly,'var(--ring-bills)'],['spent',D.spentPeriod,'var(--ring-living)'],['left',Math.max(1,kept),'var(--ring-remaining)']],140,'WENT OUT',money(wentOut,0));
+  // every day this month bars
+  const dim=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+  const bars=Array.from({length:dim},(_,i)=>{const day=i+1;const isT=day===t.getDate();
+    const amt=S.spends.filter(s=>{if(!s.ts)return false;const d=new Date(s.ts);return d.getMonth()===t.getMonth()&&d.getDate()===day;}).reduce((a,b)=>a+b.amount,0);
+    return `<i class="${isT?'today':''}" style="height:${Math.max(6,Math.min(60,amt/4))}px" title="${day}: ${money(amt,0)}"></i>`;}).join('');
+  // run to payday strip
+  const dtp=D.daysToPay||0;
+  const strip=Array.from({length:Math.max(dtp+2,8)},(_,i)=>`<i class="${i<1?'past':i===1?'today':i===dtp+1?'pay':''}"></i>`).join('');
+  // milestones
+  const ms=milestoneList().slice(0,4);const msDone=ms.filter(m=>m.done).length;
+
+  const focusHidden=S.focus?'style="display:none"':'';
+  return `${Head(fmtShort(t).toUpperCase()+' · '+t.getFullYear(),greeting(),esc(S.profile.title),
+    `<div class="focus-tog">Focus mode <button class="switch ${S.focus?'on':''}" data-a="focus"><i></i></button></div><button class="btn" data-a="tab" data-v="today" data-focuslog="1">Log a spend</button>`)}
+  <div class="wrap">
+    ${done<3?`<div class="coach"><div class="n">${done+1}</div><div class="t"><small>RIGHT NOW · ONE THING ONLY</small><b>${!tt.logged?'Log anything you spent today':!tt.balanceSet?'Set your checking balance':'Keep today under '+money(D.todayStart,0)}</b></div><div class="r"><span class="badge">30 sec</span><button class="go" data-a="tab" data-v="${!tt.balanceSet&&tt.logged?'settings':'today'}">Done — next ${ICON(IC.chev,14)}</button></div></div>`:''}
+
+    <div class="hero">
+      <div class="sec-l" style="margin-bottom:6px">SAFE TO SPEND TODAY ${qm}</div>
+      ${helpNote('One honest number for today. Your bills and set-aside money are already taken out, then what is left is spread evenly across the days until payday.')}
+      <div class="big" style="color:${pos?'var(--accent-text)':'var(--negative)'}"><span class="cur">${cur()}</span>${money(D.todayStart,2).replace(cur(),'')}</div>
+      <div class="lead">of today's starting ${money(D.todayStart)} · ${money(D.pool)} has to last until ${paydayStr}</div>
+      <button class="worked" data-a="calc">How is this worked out?</button>
+      ${S.showCalc?`<div class="card" style="margin-top:12px;margin-bottom:0">${[['In checking',D.checking],['Set aside',-D.setAside],['Bills still to land',-D.billsStillToPay],['Spent this period',-D.spentPeriod]].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:5px 0;color:var(--ink-muted);font-size:14px"><span>${k}</span><b class="disp" style="color:var(--ink)">${money(v)}</b></div>`).join('')}<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line-card);padding-top:8px;margin-top:4px;font-weight:700"><span>Has to last ${dtp} days</span><b class="disp" style="color:var(--accent-text)">${money(D.pool)}</b></div></div>`:''}
+      <div class="track"><div class="bar"><i style="width:${D.todayStart>0?Math.min(100,D.spentToday/D.todayStart*100):0}%"></i></div><small>${money(D.spentToday)} of today's starting ${money(D.todayStart)}</small></div>
+      <div class="qadd">${quicks.map(([l,a,c])=>`<button class="chip" data-a="quicklog" data-v="${a}|${l}|${c}" style="background:var(--cat-${c}-bg);color:var(--cat-${c}-ink)">+ ${l} ${cur()}${a}</button>`).join('')}<button class="btn sm" data-a="tab" data-v="today" data-focuslog="1">Log a spend</button></div>
+    </div>
+
+    <div class="card" id="logcard">
+      <div class="sec-h"><div class="sec-l">Log a spend</div></div>
+      <div class="row wrapr">
+        <input id="sp-label" placeholder="What for? (optional)" style="flex:2;min-width:140px">
+        <input id="sp-amt" type="number" inputmode="decimal" placeholder="${cur()}" style="width:100px">
+        <button class="iconbtn" data-a="addspend">${ICON(IC.plus,20)}</button>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="sec-h"><div class="sec-l">Three small things ${qm}</div><div class="sec-r">${done} of 3 done</div></div>
+        ${helpNote('Three tiny wins for today. Do them in any order — momentum matters more than money here.')}
+        ${[['logged','Log anything you spent today','30 sec'],['balanceSet','Checking balance is set','1 min'],['underToday','Keep today under '+money(D.todayStart,0),'']].map(([k,l,tm])=>`<div class="tick ${tt[k]?'done':''}"><button class="box ${tt[k]?'done':''}" data-a="tick" data-v="${k}">${tt[k]?ICON(IC.check,14):''}</button><span class="lbl">${l}</span>${tm?`<span class="t">${tm}</span>`:''}</div>`).join('')}
+        <p class="serif-it" style="margin-top:10px">${done>0?'one down. that counts.':'small steps still count.'}</p>
+      </div>
+      <div class="card">
+        <div class="sec-h"><div class="sec-l">Brain dump ${qm}</div></div>
+        ${helpNote('A place for the money thought rattling around — no amounts, no judgment. It never touches your numbers.')}
+        <input id="bd-text" placeholder="Type it, press Enter" data-a="notekey">
+        <div style="margin-top:10px">${S.notes.slice().reverse().map(n=>`<div class="listrow"><span>${esc(n.text)}</span><button class="del" data-a="del-note" data-v="${n.id}">${ICON(IC.trash,15)}</button></div>`).join('')||'<p class="serif-it" style="padding-top:4px">nothing dumped yet.</p>'}</div>
+      </div>
+    </div>
+
+    <div ${focusHidden}>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">What you logged</div><div class="sec-r">${S.spends.length?'every spend, newest first':'nothing yet'}</div></div>
+      ${spendsHtml}
+    </div>
+
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Coming up ${qm}</div><div class="sec-r serif-it">all of it already set aside</div></div>
+      ${helpNote('Bills on the horizon. They are already pulled out of your safe number, so seeing them here is a heads-up, not a scramble.')}
+      <div class="grid2">${upcoming.map(({b,d})=>`<div class="tile"><div class="k">${esc(b.name)}</div><div class="muted" style="font-size:12px;margin:-3px 0 4px">${fmtShort(d)}</div><div class="v">${money(b.amount,0)}</div></div>`).join('')||'<p class="serif-it">no bills on file yet.</p>'}</div>
+    </div>
+
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">The month so far ${qm}</div><div class="sec-r">${money(kept,0)} kept</div></div>
+      ${helpNote('Where this month’s money went, at a glance. The give-and-take fills in as you log spends.')}
+      <div class="donut-wrap"><div>${donut}</div>
+        <div class="legend">${cats.map(([k,v,c])=>`<div class="li"><div class="nm"><i style="background:${c}"></i>${k}</div><div class="am">${money(v,0)}</div></div>`).join('')}</div>
+      </div>
+      <p class="serif-it" style="margin-top:14px">${money(D.billsMonthly,0)} of bills, and ${D.spentPeriod?money(D.spentPeriod,0)+' logged':'nothing logged yet'} — the picture fills in as you go.</p>
+    </div>
+
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Every day this month</div></div>
+      <div class="daybars">${bars}</div>
+      <div class="axis"><span>${MON[t.getMonth()]} 1</span><span>today</span><span>${MON[t.getMonth()]} ${dim}</span></div>
+      ${D.spentPeriod?'':'<p class="serif-it" style="margin-top:10px">nothing logged this month yet — the shape appears as you go</p>'}
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="sec-h"><div class="sec-l">Run to payday ${qm}</div><div class="sec-r">${dtp} days left</div></div>
+        ${helpNote('The stretch from now to payday. Each day gets an equal share so no single day has to carry the load.')}
+        <div class="strip">${strip}</div>
+        <div class="axis"><span>today</span><span>payday</span></div>
+        <div style="margin-top:14px"><div class="listrow" style="border:none;padding:6px 0"><span class="soft">Left to last</span><b class="disp">${money(D.pool)}</b></div><div class="listrow" style="border:none;padding:6px 0"><span class="soft">Each day from here</span><b class="disp">about ${money(D.perDay,0)}/day</b></div></div>
+      </div>
+      <div class="card">
+        <div class="sec-h"><div class="sec-l">Milestones ${qm}</div><div class="sec-r">${msDone} of ${ms.length} reached</div></div>
+        ${helpNote('Wins that stay won. Once something is true, it stays reached — a quiet week never erases it.')}
+        ${ms.map(m=>`<div class="listrow" style="padding:11px 0"><span class="${m.done?'':'muted'}">${m.label}</span><b style="color:${m.done?'var(--positive)':'var(--ink-muted)'};font-size:13.5px">${m.done?'done':'not yet'}</b></div>`).join('')}
+        <p class="serif-it" style="margin-top:8px">read straight out of the file — once true, they stay true.</p>
+      </div>
+    </div>
+    </div>
+    ${S.focus?`<p class="serif-it" style="text-align:center;padding:10px 0 2px">Focus mode is on — showing today's essentials only. Toggle it off up top for the full dashboard.</p>`:''}
+  </div>`;
+}
+
+/* ============ PLANNER (calendar) ============ */
+function Planner(){
+  const vm=parseD(S.viewMonth);const y=vm.getFullYear(),m=vm.getMonth();const D=derive();const t=midnight();
+  const first=(new Date(y,m,1).getDay()+6)%7;const days=new Date(y,m+1,0).getDate();
+  const evByDay={};
+  S.bills.forEach(b=>{if((b.dueDom||1)<=days){(evByDay[b.dueDom||1]=evByDay[b.dueDom||1]||[]).push({t:'bill',l:b.name});}});
+  S.paychecks.forEach(p=>{const nd=nextPay(p,new Date(y,m,1));if(nd&&nd.getMonth()===m&&nd.getFullYear()===y){(evByDay[nd.getDate()]=evByDay[nd.getDate()]||[]).push({t:'pay',l:p.name});}});
+  let cells='';for(let i=0;i<first;i++)cells+=`<div class="cell blank"></div>`;
+  for(let d=1;d<=days;d++){const isT=(d===t.getDate()&&m===t.getMonth()&&y===t.getFullYear());
+    const ev=(evByDay[d]||[]).map(e=>`<span class="evt ${e.t}">${esc(e.l)}</span>`).join('');
+    cells+=`<div class="cell ${isT?'today':''}"><div class="num">${isT?d+' · TODAY':d}</div>${ev}</div>`;}
+  const inProg=(m===t.getMonth()&&y===t.getFullYear());
+  const monthTitle=new Date(y,m,1).toLocaleDateString(undefined,{month:'long'})+' '+y;
+  return `${Head('THE MONTH',monthTitle,
+    inProg?`in progress · ${D.daysToPay} days to payday`:'',
+    `<div class="row"><button class="btn ghost sm" data-a="mshift" data-v="-1">${ICON(IC.left,15)}</button><button class="pill on" style="pointer-events:none">${MON[m].toUpperCase()}</button><button class="btn ghost sm" data-a="mshift" data-v="1">${ICON(IC.chev,15)}</button><button class="btn ghost sm" data-a="mtoday">Back to today</button></div>`)}
+  <div class="wrap">
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Every day this month ${qm}</div>
+        <div class="callegend"><span><i style="background:var(--dot-must-pay)"></i>still to pay</span><span><i style="background:var(--dot-money-in)"></i>money in</span><span><i style="background:var(--line-strong)"></i>already paid</span></div></div>
+      ${helpNote('Paydays, bills and spending on one calendar so the shape of the month is visible at a glance. Today is outlined.')}
+      <div class="cal"><div class="dow">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div>${d}</div>`).join('')}</div><div class="grid" style="grid-template-columns:repeat(7,1fr)">${cells}</div></div>
+    </div>
+  </div>`;
+}
+
+/* ============ BILLS ============ */
+function Bills(){
+  const D=derive();const t=midnight();
+  const sorted=S.bills.map(b=>({b,d:nextBillDate(b,t)})).sort((a,z)=>a.d-z.d);
+  const bf=S.billForm||{freq:'monthly'};
+  return `${Head('BILLS','Every bill you owe',`${S.bills.length} bill${S.bills.length!==1?'s':''} · about ${money(D.billsMonthly,0)} a month`,
+    `<button class="btn" data-a="addbill-focus">${ICON(IC.plus,16)} Add a bill</button>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card)">
+      <div class="sec-h"><div class="sec-l">Still to go out ${qm}</div><div class="sec-r serif-it">${D.nextPayday?'before '+fmtShort(D.nextPayday):''}</div></div>
+      ${helpNote('What is not yet paid this stretch. It is already held back from your safe number, so nothing here is a surprise.')}
+      <div class="big" style="font-size:56px"><span class="cur">${cur()}</span>${money(D.billsStillToPay,2).replace(cur(),'')}</div>
+      <p class="serif-it" style="margin:8px 0 14px">${D.billsStillToPay<=0?'all clear — nothing left to pay':'all clear until '+(D.nextPayday?fmtShort(D.nextPayday):'payday')}</p>
+      <div class="bar" style="height:12px"><i style="width:${D.billsMonthly>0?Math.min(100,D.billsPaid/(D.billsPaid+D.billsStillToPay||1)*100):0}%;background:var(--positive-fill)"></i></div>
+      <div class="row" style="margin-top:10px;font-size:13px"><span class="soft"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--positive-fill)"></i> paid ${money(D.billsPaid)}</span><span class="soft"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ring-bills)"></i> to pay ${money(D.billsStillToPay)}</span></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Soonest first ${qm}</div><div class="sec-r">${S.bills.length} bill${S.bills.length!==1?'s':''}</div></div>
+      ${helpNote('Your bills lined up by the next date each is due, so the nearest one is always on top.')}
+      ${sorted.map(({b,d})=>`<div class="listrow"><span style="display:flex;align-items:center;gap:12px"><span class="datechip"><span class="d">${fmtDom(d)}</span><span class="m">${MON[d.getMonth()]}</span></span><span><b>${esc(b.name)}</b><div class="muted" style="font-size:12.5px">${b.paid?'paid this period':'monthly'} · ${money(billMonthly(b),0)}/mo</div></span></span><span style="display:flex;align-items:center;gap:10px"><b class="disp">${money(b.amount,0)}</b><button class="del" data-a="toggle-billpaid" data-v="${b.id}" title="mark paid/unpaid">${b.paid?ICON(IC.check,15):'<span style="width:15px;height:15px;display:inline-block;border:1.5px solid var(--line-strong);border-radius:4px"></span>'}</button><button class="del" data-a="del-bill" data-v="${b.id}">${ICON(IC.trash,15)}</button></span></div>`).join('')||'<p class="serif-it">no bills yet — add rent, phone, anything you can’t skip.</p>'}
+    </div>
+    <div class="card" id="billform">
+      <div class="sec-h"><div class="sec-l">Add a bill</div></div>
+      <div class="row wrapr" style="margin-bottom:10px"><input id="bl-name" placeholder="Name (Rent, Phone…)" style="flex:2;min-width:140px"><input id="bl-amt" type="number" placeholder="${cur()} amount" style="width:120px"></div>
+      <div class="row wrapr"><select id="bl-freq" style="flex:1;min-width:150px">${[['monthly','Monthly'],['twicemonthly','Twice a month'],['biweekly','Every 2 weeks'],['weekly','Weekly']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select><input id="bl-dom" type="number" min="1" max="31" placeholder="day of month" style="width:140px"><button class="btn" data-a="addbill">Add bill</button></div>
+    </div>
+  </div>`;
+}
+
+/* ============ MONEY IN ============ */
+function MoneyIn(){
+  const D=derive();const t=midnight();
+  const arrived=S.income.filter(x=>x.ts&&new Date(x.ts).getMonth()===t.getMonth()).reduce((s,x)=>s+(+x.amount||0),0);
+  return `${Head('MONEY IN','Everything else that turned up',S.income.length?`${S.income.length} recorded`:'nothing put down yet',
+    `<button class="btn" data-a="addinc-focus">${ICON(IC.plus,16)} Record money in</button>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card);background:linear-gradient(145deg,#eaf5ee,#f2f6ef)">
+      <div class="sec-h"><div class="sec-l">Arrived this month ${qm}</div><div class="sec-r">${MON[t.getMonth()]} ${t.getFullYear()}</div></div>
+      ${helpNote('One-off money that showed up — a refund, a gift, side income. Regular paychecks live in Settings; this is everything else.')}
+      <div class="big" style="font-size:56px;color:var(--positive)"><span class="cur">${cur()}</span>${money(arrived,2).replace(cur(),'')}</div>
+      <p class="serif-it" style="margin-top:8px">Add a refund, gift or side income whenever it turns up.</p>
+      <div class="grid2" style="margin-top:16px"><div class="tile"><div class="k">Still to come</div><div class="v">${money(0)}</div><div class="s">nothing before ${D.nextPayday?fmtShort(D.nextPayday):'payday'}</div></div><div class="tile"><div class="k">Later</div><div class="v">${money(0)}</div><div class="s">nothing after ${D.nextPayday?fmtShort(D.nextPayday):'payday'}</div></div></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Newest first</div></div>
+      ${S.income.slice().reverse().map(x=>`<div class="listrow"><b>${esc(x.label)}</b><span style="display:flex;align-items:center;gap:10px"><b class="disp pos">+${money(x.amount,0)}</b><button class="del" data-a="del-inc" data-v="${x.id}">${ICON(IC.trash,15)}</button></span></div>`).join('')||'<p class="serif-it">nothing put down yet.</p>'}
+    </div>
+    <div class="card" id="incform">
+      <div class="sec-h"><div class="sec-l">Record money in</div></div>
+      <div class="row wrapr"><input id="in-label" placeholder="Refund, gift, side gig…" style="flex:2;min-width:140px"><input id="in-amt" type="number" placeholder="${cur()}" style="width:110px"><button class="iconbtn" data-a="addinc">${ICON(IC.plus,20)}</button></div>
+    </div>
+  </div>`;
+}
+
+/* ============ GOALS ============ */
+function Goals(){
+  const D=derive();const pctAll=D.goalTarget>0?Math.round(D.savedTotal/D.goalTarget*100):0;
+  const perMonth=S.goals.reduce((s,g)=>s+(+g.perMonth||0),0);
+  const stillToFind=Math.max(0,D.goalTarget-D.savedTotal);
+  const nearest=S.goals.map(g=>g.reaches).filter(Boolean)[0]||'—';
+  return `${Head('GOALS','What you are saving for',`${S.goals.length} goal${S.goals.length!==1?'s':''} · ${money(perMonth,0)} a month`,
+    `<button class="btn" data-a="addgoal-focus">${ICON(IC.plus,16)} Add a goal</button>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card)">
+      <div class="sec-h"><div class="sec-l">Put away so far ${qm}</div><div class="sec-r serif-it">${S.goals.length} goals · ${money(D.goalTarget,0)} in all</div></div>
+      ${helpNote('Everything you are saving toward, in one place. Watch each ring fill as the money grows.')}
+      <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div class="big" style="font-size:52px">${money(D.savedTotal)}</div><span class="eb">${pctAll}% complete</span></div>
+      <div class="row wrapr" style="gap:24px;margin:20px 0 6px">${S.goals.map(g=>{const pct=g.target>0?Math.round(g.saved/g.target*100):0;return `<div style="text-align:center">${ringSVG(pct,'var(--accent)')}<div style="font-size:14px;font-weight:600;margin-top:8px">${esc(g.name)}</div><div class="muted" style="font-size:12.5px">${money(g.saved,0)} of ${money(g.target,0)}</div></div>`;}).join('')||'<p class="serif-it">no goals yet.</p>'}</div>
+      <div class="grid2" style="margin-top:14px"><div class="tile"><div class="k">Still to find</div><div class="v">${money(stillToFind,0)}</div></div><div class="tile"><div class="k">Nearest date</div><div class="v">${nearest}</div></div></div>
+    </div>
+    ${S.goals.map(g=>{const pct=g.target>0?Math.min(100,g.saved/g.target*100):0;return `<div class="card"><div class="sec-h"><div class="sec-l" style="text-transform:none;letter-spacing:0;font-size:15px;font-family:var(--font-display);font-weight:500">${esc(g.name)}</div><button class="del" data-a="del-goal" data-v="${g.id}">${ICON(IC.trash,15)}</button></div>
+      <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:8px"><span class="soft">${money(g.saved,0)} of ${money(g.target,0)}</span><span class="muted">${g.reaches?'reaches '+g.reaches:''}</span></div>
+      <div class="bar"><i style="width:${pct}%;background:var(--positive-fill)"></i></div>
+      <div class="row wrapr" style="margin-top:12px;align-items:center"><span class="muted" style="font-size:13px;flex:1">${money(Math.max(0,g.target-g.saved),0)} to go · ${g.perMonth?money(g.perMonth,0)+' / month':'add when you can'}</span>${[10,25,50].map(a=>`<button class="pill" data-a="goal-add" data-v="${g.id}:${a}">+${cur()}${a}</button>`).join('')}</div></div>`;}).join('')}
+    <div class="card" id="goalform">
+      <div class="sec-h"><div class="sec-l">Add a goal</div></div>
+      <div class="row wrapr"><input id="gl-name" placeholder="Goal name" style="flex:2;min-width:140px"><input id="gl-target" type="number" placeholder="${cur()} target" style="width:120px"><button class="iconbtn" data-a="addgoal">${ICON(IC.plus,20)}</button></div>
+    </div>
+  </div>`;
+}
+
+/* ============ DEBT ============ */
+function Debt(){
+  const total=S.debts.reduce((s,d)=>s+(+d.balance||0),0);
+  const order=S.debtOrder||'avalanche';
+  const sorted=[...S.debts].sort((a,b)=>order==='avalanche'?(b.apr-a.apr):(a.balance-b.balance));
+  return `${Head('DEBT','Paying it down',S.debts.length?`${S.debts.length} on the file · ${money(total,0)} owed`:'nothing owed on this file yet',
+    `<button class="btn" data-a="adddebt-focus">${ICON(IC.plus,16)} Add a debt</button>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card);background:${total>0?'linear-gradient(145deg,#f8ece9,#f6eef4)':'var(--grad-hero)'}">
+      <div class="sec-h"><div class="sec-l">Still owed ${qm}</div><div class="sec-r serif-it">${total>0?'':'nothing on the file'}</div></div>
+      ${helpNote('Optional. Add what you owe only if you want a payoff plan — pick one to attack first and ignore the rest until it is gone.')}
+      <div class="big" style="font-size:56px;color:${total>0?'var(--negative)':'var(--ink-display)'}"><span class="cur">${cur()}</span>${money(total,2).replace(cur(),'')}</div>
+      <p class="serif-it" style="margin-top:8px">${total>0?'one focus at a time — less to hold in your head':'Nothing owed here — add one only if you want a payoff plan.'}</p>
+    </div>
+    ${S.debts.length?`<div class="row" style="margin-bottom:16px"><button class="pill ${order==='avalanche'?'on':''}" data-a="debtorder" data-v="avalanche">Highest rate first</button><button class="pill ${order==='snowball'?'on':''}" data-a="debtorder" data-v="snowball">Smallest first</button></div>`:''}
+    ${sorted.map((d,i)=>`<div class="card" style="${i===0?'border-color:var(--accent-soft-deep)':''}"><div class="listrow" style="border:none;padding:0"><span><b>${esc(d.name)}${i===0?' <span class="eb" style="margin-left:6px">focus here</span>':''}</b><div class="muted" style="font-size:12.5px">${d.apr||0}% APR · min ${money(d.min||0,0)}</div></span><span style="display:flex;align-items:center;gap:10px"><b class="disp">${money(d.balance,0)}</b><button class="del" data-a="del-debt" data-v="${d.id}">${ICON(IC.trash,15)}</button></span></div></div>`).join('')}
+    <div class="card" id="debtform">
+      <div class="sec-h"><div class="sec-l">Add a debt</div></div>
+      <div class="row wrapr" style="margin-bottom:10px"><input id="db-name" placeholder="Name (Visa…)" style="flex:2;min-width:140px"><input id="db-bal" type="number" placeholder="balance" style="width:120px"></div>
+      <div class="row wrapr"><input id="db-min" type="number" placeholder="min payment" style="flex:1;min-width:120px"><input id="db-apr" type="number" placeholder="APR %" style="flex:1;min-width:120px"><button class="btn" data-a="adddebt">Add debt</button></div>
+    </div>
+  </div>`;
+}
+
+/* ============ ENVELOPES ============ */
+function Envelopes(){
+  const totalCap=S.envelopes.reduce((s,e)=>s+(+e.cap||0),0);
+  const totalSpent=S.envelopes.reduce((s,e)=>s+(+e.spent||0),0);
+  const left=totalCap-totalSpent;const D=derive();
+  const perDay=D.daysToPay?left/D.daysToPay:left;
+  return `${Head('ENVELOPES','What each kind of spending gets',`${S.envelopes.length} envelope${S.envelopes.length!==1?'s':''} · caps, not reservations`,
+    `<button class="btn" data-a="addenv-focus">${ICON(IC.plus,16)} Add an envelope</button>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card)">
+      <div class="sec-h"><div class="sec-l">Left across every envelope ${qm}</div><div class="sec-r serif-it">${money(totalCap,0)} in caps</div></div>
+      ${helpNote('A cap is a line to notice, not a wall. Go over and nothing breaks — the app just tells you, because the money was already counted once.')}
+      <div class="big" style="font-size:56px"><span class="cur">${cur()}</span>${money(left,2).replace(cur(),'')}</div>
+      <p class="serif-it" style="margin:8px 0 14px">${totalSpent<=0?'nothing spent against them yet':money(totalSpent,0)+' spent so far'}</p>
+      <div class="grid3"><div class="tile"><div class="k">Spent</div><div class="v">${money(totalSpent,0)}</div></div><div class="tile"><div class="k">In caps</div><div class="v">${money(totalCap,0)}</div><div class="s">${S.envelopes.length} envelope${S.envelopes.length!==1?'s':''}</div></div><div class="tile"><div class="k">A day from here</div><div class="v">${money(perDay,0)}</div><div class="s">${D.daysToPay||0} days to payday</div></div></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Every envelope ${qm}</div><div class="sec-r serif-it">all inside</div></div>
+      ${helpNote('Each kind of spending and how much room is left in it. Over a cap? No shame — just information.')}
+      ${S.envelopes.map(e=>{const pct=e.cap>0?e.spent/e.cap*100:0;const over=e.spent>e.cap;const rem=e.cap-e.spent;return `<div class="listrow" style="align-items:center"><b style="flex:0 0 120px">${esc(e.name)}</b><div class="bar" style="flex:1;margin:0 12px"><i style="width:${Math.min(100,pct)}%;background:${over?'var(--negative)':'var(--positive-fill)'}"></i></div><span class="disp muted" style="font-size:14px;flex:0 0 auto">${money(rem,0)} left</span><button class="del" data-a="del-env" data-v="${e.id}">${ICON(IC.trash,15)}</button></div>`;}).join('')||'<p class="serif-it">no envelopes yet.</p>'}
+      <p class="serif-it" style="margin-top:12px">Over a cap? No shame, just information — the money was already counted once.</p>
+    </div>
+    <div class="card" id="envform">
+      <div class="sec-h"><div class="sec-l">Add an envelope</div></div>
+      <div class="row wrapr"><input id="ev-name" placeholder="Category (Food, Fun…)" style="flex:2;min-width:140px"><input id="ev-cap" type="number" placeholder="${cur()} cap" style="width:120px"><button class="iconbtn" data-a="addenv">${ICON(IC.plus,20)}</button></div>
+    </div>
+  </div>`;
+}
+
+/* ============ MILESTONES ============ */
+function milestoneList(){
+  const D=derive();
+  const anyGoalDone=S.goals.some(g=>g.target>0&&g.saved>=g.target);
+  return [
+    {label:'Every bill covered before payday',done:D.billsStillToPay<=0&&S.bills.length>0,counts:S.bills.length>0},
+    {label:money(1000,0)+' set aside',done:D.savedTotal>=1000,counts:true},
+    {label:'A day without spending',done:false,counts:true},
+    {label:'A goal reached in full',done:anyGoalDone,counts:S.goals.length>0},
+    {label:'A month with every bill ticked off',done:false,counts:S.bills.length>0},
+    {label:'Started a savings goal',done:S.goals.some(g=>g.saved>0),counts:true},
+    {label:'Kept a positive safe number',done:D.pool>=0,counts:true},
+    {label:'Cleared all debt',done:S.debts.length>0&&S.debts.every(d=>d.balance<=0),counts:S.debts.length>0},
+  ];
+}
+function Milestones(){
+  const list=milestoneList();
+  const counted=list.filter(m=>m.counts);const reached=counted.filter(m=>m.done).length;
+  const notCounted=list.length-counted.length;
+  const f=S.milestoneFilter;
+  const shown=list.filter(m=>f==='all'?true:f==='reached'?m.done:!m.done);
+  return `${Head('MILESTONES','Things that already happened','worked out from what is already in the file',
+    `<div class="row">${[['all','All'],['reached','Reached'],['notyet','Not yet']].map(([v,l])=>`<button class="pill ${f===v?'on':''}" data-a="msfilter" data-v="${v}">${l}</button>`).join('')}</div>`)}
+  <div class="wrap">
+    <div class="hero" style="box-shadow:var(--shadow-card);background:linear-gradient(145deg,#eaf5ee,#f2f6ef)">
+      <div class="sec-h"><div class="sec-l">Reached so far ${qm}</div><div class="sec-r">${notCounted} not counted yet</div></div>
+      ${helpNote('Milestones are read straight from your file — nothing to tick by hand. Once one is true, it stays reached.')}
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="big" style="font-size:52px">${reached}</div><span class="muted disp" style="font-size:20px">of ${counted.length}</span></div>
+      <p class="serif-it" style="margin:6px 0 14px">once reached, they stay reached</p>
+      <div class="bar" style="height:12px;display:flex;gap:0;overflow:hidden"><i style="width:${reached/list.length*100}%;background:var(--positive-fill);border-radius:0"></i><i style="width:${(counted.length-reached)/list.length*100}%;background:var(--ring-bills);border-radius:0"></i><i style="width:${notCounted/list.length*100}%;background:var(--ring-remaining);border-radius:0"></i></div>
+      <div class="row wrapr" style="margin-top:10px;font-size:13px"><span class="soft"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--positive-fill)"></i> reached ${reached}</span><span class="soft"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ring-bills)"></i> not yet ${counted.length-reached}</span><span class="soft"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ring-remaining)"></i> not counted ${notCounted}</span></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Every milestone ${qm}</div><div class="sec-r">all ${list.length}</div></div>
+      ${shown.map(m=>`<div class="listrow"><span style="display:flex;align-items:center;gap:12px"><span style="width:26px;height:26px;border-radius:50%;background:${m.done?'var(--positive-fill)':'var(--rail-tab-fill)'};color:#fff;display:flex;align-items:center;justify-content:center">${m.done?ICON(IC.check,14):'<span style="width:7px;height:7px;border-radius:50%;background:var(--ink-muted)"></span>'}</span><span class="${m.done?'':'muted'}">${m.label}</span></span>${m.done?'<span class="eb">reached</span>':`<span class="muted" style="font-size:13px">${m.counts?'not yet':'not counted'}</span>`}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ============ SETTINGS ============ */
+function Settings(){
+  const D=derive();
+  return `${Head('SETTINGS','How this works','saved here first — syncing is optional','')}
+  <div class="wrap">
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Who this is for</div><div class="sec-r serif-it">saved as you type</div></div>
+      <div class="grid2">
+        <div><label class="muted" style="font-size:13px">Preferred name</label><input id="st-name" value="${esc(S.profile.name)}" placeholder="Alex" data-a="setfield" style="margin-top:6px"><div class="muted" style="font-size:12px;margin-top:5px">shown in your planner — leave blank to show “Your planner”</div></div>
+        <div><label class="muted" style="font-size:13px">Planner title</label><input id="st-title" value="${esc(S.profile.title)}" placeholder="ADHD Budget Planner" data-a="setfield" style="margin-top:6px"><div class="muted" style="font-size:12px;margin-top:5px">for example: My calm money plan or Family budget</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Your money ${qm}</div><div class="sec-r serif-it">saved as you type</div></div>
+      ${helpNote('Two numbers do most of the work: what is in checking, and how much of it is already spoken for.')}
+      <div class="grid2">
+        <div><label class="muted" style="font-size:13px">In checking right now</label><input id="st-check" type="number" value="${+S.profile.checking||0}" data-a="setfield" style="margin-top:6px;font-size:17px"><div class="muted" style="font-size:12px;margin-top:5px">type it from your bank — this planner never connects to your bank</div></div>
+        <div><label class="muted" style="font-size:13px">Already set aside</label><input id="st-aside" type="number" value="${+S.profile.setAside||0}" data-a="setfield" style="margin-top:6px;font-size:17px"><div class="muted" style="font-size:12px;margin-top:5px">money in checking that is already spoken for</div></div>
+      </div>
+      <div style="margin-top:14px;max-width:220px"><label class="muted" style="font-size:13px">Currency</label><select id="st-cur" data-a="setcur" style="margin-top:6px">${[['$','USD $'],['£','GBP £'],['€','EUR €'],['C$','CAD C$'],['A$','AUD A$']].map(([v,l])=>`<option value="${v}" ${S.profile.currency===v?'selected':''}>${l}</option>`).join('')}</select><div class="muted" style="font-size:12px;margin-top:5px">changes the mark and the decimals, not the maths</div></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Paydays</div></div>
+      <p class="muted" style="font-size:13.5px;margin-bottom:12px">Everything is measured to your next payday. How does money usually come in?</p>
+      <div class="row" style="margin-bottom:12px"><button class="pill ${S.payMode==='one'?'on':''}" data-a="paymode" data-v="one">One paycheck</button><button class="pill ${S.payMode==='multi'?'on':''}" data-a="paymode" data-v="multi">More than one</button></div>
+      ${D.nextPayday?`<div class="tile" style="margin-bottom:12px"><span class="soft">Next up: <b>${S.paychecks.length?esc(S.paychecks[0].name):'your pay'} on ${fmtShort(D.nextPayday)}</b></span><div class="muted" style="font-size:13px;margin-top:3px">Your safe to spend is working toward that payday.</div></div>`:''}
+      ${S.paychecks.map(p=>{const nd=nextPay(p);return `<div class="listrow"><span><b>${esc(p.name)}</b><div class="muted" style="font-size:12.5px">${({weekly:'every week',biweekly:'every two weeks',twicemonthly:'twice a month',monthly:'once a month'})[p.freq]||p.freq}${nd?' · next '+fmtShort(nd):''}</div></span><span style="display:flex;align-items:center;gap:10px"><b class="disp">${money(p.amount,0)}</b><button class="del" data-a="del-pay" data-v="${p.id}">${ICON(IC.trash,15)}</button></span></div>`;}).join('')}
+      <div class="row wrapr" style="margin-top:12px"><input id="pc-name" placeholder="e.g. Main job" style="flex:2;min-width:130px"><input id="pc-amt" type="number" placeholder="${cur()}" style="width:100px"><select id="pc-freq" style="flex:1;min-width:130px">${[['biweekly','Every 2 weeks'],['weekly','Weekly'],['twicemonthly','Twice a month'],['monthly','Monthly']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select><input id="pc-anchor" type="date" value="${isoD(addDays(midnight(),6))}" style="flex:1;min-width:150px"><button class="btn" data-a="addpay">Add paycheck</button></div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">This pay period ${qm}</div><div class="sec-r">${D.daysToPay||0} days</div></div>
+      ${helpNote('The full sum behind your safe number, laid out line by line so nothing is hidden.')}
+      ${[['Safe to spend',D.pool],['Per day until payday','about '+money(D.perDay,0)+'/day'],['In checking',D.checking],['Bills still to land',-D.billsStillToPay],['Set aside and already spent',-(D.setAside+D.spentPeriod)]].map(([k,v],i)=>`<div class="listrow"><span class="soft">${k}</span><b class="disp">${typeof v==='string'?v:money(v)}</b></div>`).join('')}
+      <p class="serif-it" style="margin-top:10px">${D.nextPayday?'until '+(S.paychecks.length?esc(S.paychecks[0].name):'your pay')+' lands '+fmtShort(D.nextPayday):'add a payday to see this'}</p>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Appearance</div></div>
+      <p class="muted" style="font-size:13.5px;margin-bottom:10px">Same meanings, brighter or darker.</p>
+      <div class="row">${[['light','Soft Spectrum'],['dark','Midnight Spectrum']].map(([v,l])=>`<button class="pill ${(S.theme||'light')===v?'on':''}" data-a="settheme" data-v="${v}">${l}</button>`).join('')}</div>
+    </div>
+    <div class="card">
+      <div class="sec-h"><div class="sec-l">Your data ${qm}</div></div>
+      ${helpNote('Your planner saves on this device first, in the browser’s own storage. A backup file is the copy that survives if that storage is ever cleared.')}
+      <p class="muted" style="font-size:13.5px;margin-bottom:14px">Everything saves on this device, in the browser’s own storage. Download a backup so a copy survives if the browser clears its storage.</p>
+      <div class="row wrapr"><button class="btn ghost" data-a="backup">${ICON(IC.download,15)} Download a backup</button><button class="btn ghost" data-a="csv">Export spending CSV</button><label class="btn ghost" style="cursor:pointer">Restore your backup file<input type="file" id="restore" accept="application/json" style="display:none" data-a="restore"></label></div>
+      <p class="muted" style="font-size:12.5px;margin:16px 0 8px">Erasing takes every number off this device. No undo — download a backup first.</p>
+      <button class="btn ghost" data-a="erase" style="color:var(--negative);border-color:var(--danger-soft)">Erase everything</button>
+    </div>
+  </div>`;
+}
+
+/* ============ svg helpers ============ */
+function ringSVG(pct,color){
+  const r=48,c=2*Math.PI*r,off=c*(1-Math.min(100,pct)/100);
+  return `<div class="ring"><svg width="112" height="112" viewBox="0 0 112 112"><circle cx="56" cy="56" r="${r}" fill="none" stroke="var(--ring-remaining)" stroke-width="10"/><circle cx="56" cy="56" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 56 56)"/></svg><div class="pct">${pct}%</div></div>`;
+}
+function donutSVG(parts,size,label,center){
+  const total=parts.reduce((s,p)=>s+p[1],0)||1;const r=size/2-14,cx=size/2,cy=size/2,c=2*Math.PI*r;let acc=0;
+  const segs=parts.map(p=>{const frac=p[1]/total;const dash=`${frac*c} ${c-frac*c}`;const off=-acc*c;acc+=frac;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${p[2]}" stroke-width="16" stroke-dasharray="${dash}" stroke-dashoffset="${off}" transform="rotate(-90 ${cx} ${cy})"/>`;}).join('');
+  return `<div style="position:relative;width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}">${segs}</svg>
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);font-weight:600">${label}</span>
+      <span class="disp" style="font-size:22px;font-weight:500">${center}</span></div></div>`;
+}
+
+/* ============ onboarding ============ */
+function Onboarding(){
+  const steps=[
+    {eb:'Setup · about 30 seconds',q:"What’s in your spending account right now?",help:"Open your bank app and type it in. This never connects to your bank — you stay in control.",id:'ob-check',val:S.profile.checking,ph:'0'},
+    {eb:'Step 2 of 4',q:"Any of it already spoken for?",help:"Money you can’t touch, beyond regular bills. Not sure? Leave it at zero.",id:'ob-aside',val:S.profile.setAside,ph:'0'},
+    {eb:'Step 3 of 4',q:"When’s your next payday?",help:"Roughly is fine. It’s just how many days this money has to stretch.",id:'ob-pay',date:true,val:S.paychecks[0]?S.paychecks[0].anchor:isoD(addDays(midnight(),14))},
+    {eb:'Step 4 of 4',q:"What’s your first bill?",help:"Rent, phone, a minimum — anything you can’t skip. You can add more later.",id:'ob-bill',bill:true},
+  ];
+  const st=steps[S.ob],last=S.ob===steps.length-1;
+  let field;
+  if(st.date){field=`<input id="${st.id}" type="date" value="${st.val}" class="disp" style="font-size:22px;padding:16px">`;}
+  else if(st.bill){field=`<div class="row wrapr"><input id="ob-bill-name" placeholder="Rent, Phone…" style="flex:2;min-width:130px"><input id="ob-bill-amt" type="number" placeholder="${cur()} amount" style="width:130px"></div>`;}
+  else{field=`<div class="bigin"><span>${cur()}</span><input id="${st.id}" type="number" inputmode="decimal" value="${st.val||''}" placeholder="${st.ph}"></div>`;}
+  return `<div class="ob">
+    <div class="prog">${steps.map((_,i)=>`<i class="${i<=S.ob?'on':''}"></i>`).join('')}</div>
+    <div class="step"><div class="eyebrow2">${st.eb}</div><h2>${st.q}</h2><p>${st.help}</p>${field}</div>
+    <div class="navr">${S.ob>0?`<button class="btn ghost" data-a="ob-back">${ICON(IC.left,16)} Back</button>`:''}<button class="btn block" data-a="ob-next">${last?'See my number':'Next'}</button></div>
+    <button class="skip" data-a="ob-example">Explore with example numbers instead</button>
+  </div>`;
+}
+
+/* ============ render ============ */
+function render(){
+  document.documentElement.setAttribute('data-theme',S.theme||'light');
+  document.body.classList.toggle('help-on',!!S.help);
+  const root=document.getElementById('root');
+  if(!S.onboarded){root.innerHTML=Onboarding();bind();return;}
+  const screens={today:Today,planner:Planner,bills:Bills,income:MoneyIn,goals:Goals,debt:Debt,envelopes:Envelopes,milestones:Milestones,settings:Settings};
+  if(!screens[S.tab])S.tab='today';
+  const banner=(S.example&&!S.bannerHidden)?`<div class="banner"><div class="msg"><b>Using example numbers</b> — these are made up, so you can safely explore the rent, goals and balance.</div><div class="acts"><button class="b1" data-a="keep-example">Keep exploring the example</button><button class="b2" data-a="use-mine">Use my numbers</button><button class="x" data-a="hide-banner">✕</button></div></div>`:'';
+  root.innerHTML=`<div id="app">${LeftRail()}<main class="main">${banner}${MobMonthRail()}${screens[S.tab]()}${MobNav()}</main>${MonthRail()}</div>${(!S.tourDone)?Tour():''}`;
+  bind();
+  const _mb=document.querySelector('.mobmonths');
+  if(_mb){const _c=_mb.querySelector('.mchip.cur');if(_c)_mb.scrollLeft=_c.offsetLeft-_mb.clientWidth/2+_c.clientWidth/2;}
+}
+
+/* ============ events ============ */
+function readNum(id){const el=document.getElementById(id);return el&&el.value!==''?Number(el.value):null;}
+function readStr(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1900);}
+function focusEl(id){const el=document.getElementById(id);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>el.focus(),200);}}
+function catFor(label){const l=(label||'').toLowerCase();if(/coffee|latte|tea/.test(l))return'coffee';if(/lunch|dinner|food|eat|restaurant|snack/.test(l))return'food';if(/bus|gas|fuel|uber|train|transit/.test(l))return'gas';if(/grocer|market/.test(l))return'groceries';if(/fun|movie|game|drink/.test(l))return'fun';return'other';}
+
+function openPalette(){const s=document.getElementById('scrim');s.classList.add('on');const i=document.getElementById('pal-in');i.value='';setTimeout(()=>i.focus(),30);}
+function closePalette(){document.getElementById('scrim').classList.remove('on');}
+function runPalette(v){
+  v=v.trim();if(!v)return;
+  const m=v.match(/^(\d+(?:\.\d+)?)\s+(.+)$/)||v.match(/^(.+?)\s+(\d+(?:\.\d+)?)$/);
+  if(m){let amt,label;if(/^\d/.test(m[1])){amt=+m[1];label=m[2];}else{amt=+m[2];label=m[1];}
+    S.spends.push({id:uid(),label:label||'Spend',amount:amt,cat:catFor(label),ts:Date.now()});S.threeThings.logged=true;persist();closePalette();render();toast('Logged '+money(amt,0)+' · '+label);return;}
+  const t=v.toLowerCase();const hit=NAVS.find(([k,l])=>k===t||l.toLowerCase()===t||l.toLowerCase().startsWith(t));
+  if(hit){closePalette();set({tab:hit[0]});return;}
+  toast('Try “12 coffee”, or a screen name');
+}
+
+function bind(){
+  const root=document.getElementById('root');
+  const pin=document.getElementById('pal-in');
+  if(pin){pin.onkeydown=(e)=>{if(e.key==='Enter')runPalette(pin.value);if(e.key==='Escape')closePalette();};}
+  document.getElementById('scrim').onclick=(e)=>{if(e.target.id==='scrim')closePalette();};
+
+  root.onkeydown=(e)=>{
+    if(e.target.id==='sp-amt'&&e.key==='Enter')doAdd('addspend');
+    if(e.target.id==='bd-text'&&e.key==='Enter'){const tx=e.target.value.trim();if(tx){S.notes.push({id:uid(),text:tx});persist();render();}}
+    if(['in-amt','ev-cap','gl-target','bl-dom'].includes(e.target.id)&&e.key==='Enter'){e.preventDefault();}
+  };
+  // live text field saves in settings
+  ['st-name','st-title','st-check','st-aside'].forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=()=>{
+    if(id==='st-name')S.profile.name=el.value.trim();
+    if(id==='st-title')S.profile.title=el.value.trim()||'ADHD Budget Planner';
+    if(id==='st-check'){S.profile.checking=el.value===''?'':Number(el.value);S.threeThings.balanceSet=true;}
+    if(id==='st-aside')S.profile.setAside=el.value===''?0:Number(el.value);
+    persist();};});
+
+  root.onclick=(e)=>{
+    const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,v=el.dataset.v;
+    switch(a){
+      case 'tab':{S.tab=v;persist();render();if(el.dataset.focuslog)setTimeout(()=>focusEl('sp-label'),60);break;}
+      case 'month':{S.viewMonth=isoD(new Date(new Date().getFullYear(),+v,1));set({tab:'planner'});break;}
+      case 'help':set({help:!S.help});break;
+      case 'themetoggle':set({theme:(S.theme||'light')==='dark'?'light':'dark'});break;
+      case 'tour-skip':set({tourDone:true});break;
+      case 'tour-back':set({tourStep:Math.max(0,(S.tourStep||0)-1)});break;
+      case 'tour-next':{const n=tourSteps().length;if((S.tourStep||0)>=n-1)set({tourDone:true});else set({tourStep:(S.tourStep||0)+1});break;}
+      case 'focus':set({focus:!S.focus});break;
+      case 'calc':set({showCalc:!S.showCalc});break;
+      case 'palette':openPalette();break;
+      case 'tick':{S.threeThings[v]=!S.threeThings[v];persist();render();break;}
+      case 'quicklog':{if(demoBlocked('spends'))break;const[amt,label,cat]=v.split('|');S.spends.push({id:uid(),label,amount:+amt,cat,ts:Date.now()});S.threeThings.logged=true;persist();render();toast('Logged '+money(+amt,0)+' · '+label);break;}
+      case 'addspend':doAdd('addspend');break;
+      case 'del-spend':S.spends=S.spends.filter(x=>x.id!=v);set({});break;
+      case 'del-note':S.notes=S.notes.filter(x=>x.id!=v);set({});break;
+      case 'addbill-focus':focusEl('bl-name');break;
+      case 'addbill':doAdd('addbill');break;
+      case 'del-bill':S.bills=S.bills.filter(x=>x.id!=v);set({});break;
+      case 'toggle-billpaid':{const b=S.bills.find(x=>x.id==v);if(b)b.paid=!b.paid;set({});break;}
+      case 'addinc-focus':focusEl('in-label');break;
+      case 'addinc':doAdd('addinc');break;
+      case 'del-inc':S.income=S.income.filter(x=>x.id!=v);set({});break;
+      case 'addgoal-focus':focusEl('gl-name');break;
+      case 'addgoal':doAdd('addgoal');break;
+      case 'goal-add':{const[id,amt]=v.split(':');const g=S.goals.find(x=>x.id==id);if(g)g.saved=(+g.saved||0)+ +amt;set({});break;}
+      case 'del-goal':S.goals=S.goals.filter(x=>x.id!=v);set({});break;
+      case 'adddebt-focus':focusEl('db-name');break;
+      case 'adddebt':doAdd('adddebt');break;
+      case 'del-debt':S.debts=S.debts.filter(x=>x.id!=v);set({});break;
+      case 'debtorder':set({debtOrder:v});break;
+      case 'addenv-focus':focusEl('ev-name');break;
+      case 'addenv':doAdd('addenv');break;
+      case 'del-env':S.envelopes=S.envelopes.filter(x=>x.id!=v);set({});break;
+      case 'msfilter':set({milestoneFilter:v});break;
+      case 'mshift':{const d=parseD(S.viewMonth);d.setMonth(d.getMonth()+ +v);set({viewMonth:isoD(d)});break;}
+      case 'mtoday':set({viewMonth:isoD(new Date(new Date().getFullYear(),new Date().getMonth(),1))});break;
+      case 'paymode':set({payMode:v});break;
+      case 'addpay':doAdd('addpay');break;
+      case 'del-pay':S.paychecks=S.paychecks.filter(x=>x.id!=v);set({});break;
+      case 'setcur':break;
+      case 'settheme':set({theme:v});break;
+      case 'paymode':set({payMode:v});break;
+      case 'keep-example':toast('Still exploring — nothing here is saved to your real numbers');break;
+      case 'hide-banner':set({bannerHidden:true});break;
+      case 'use-mine':{S=defaultState();persist();render();break;}
+      case 'backup':downloadBackup();break;
+      case 'csv':exportCSV();break;
+      case 'erase':{if(confirm('Erase everything on this device? No undo — download a backup first.')){S=defaultState();try{localStorage.removeItem(KEY);}catch(_){}mem=null;render();}break;}
+      case 'ob-next':obNext();break;
+      case 'ob-back':set({ob:Math.max(0,S.ob-1)});break;
+      case 'ob-example':{S=exampleState();persist();render();break;}
+    }
+  };
+  const cs=document.getElementById('st-cur');if(cs)cs.onchange=()=>{S.profile.currency=cs.value;persist();render();};
+  const rf=document.getElementById('restore');if(rf)rf.onchange=(e)=>restoreBackup(e.target.files[0]);
+}
+
+function doAdd(kind){
+  if(kind==='addspend'){if(demoBlocked('spends'))return;const amt=readNum('sp-amt');if(!amt)return;const label=readStr('sp-label')||'Spend';S.spends.push({id:uid(),label,amount:amt,cat:catFor(label),ts:Date.now()});S.threeThings.logged=true;set({});toast('Logged '+money(amt,0));}
+  if(kind==='addbill'){if(demoBlocked('bills'))return;const name=readStr('bl-name'),amt=readNum('bl-amt');if(!name||!amt)return;S.bills.push({id:uid(),name,amount:amt,freq:document.getElementById('bl-freq').value,dueDom:readNum('bl-dom')||1,paid:false});set({});}
+  if(kind==='addinc'){if(demoBlocked('income'))return;const l=readStr('in-label'),amt=readNum('in-amt');if(!l||!amt)return;S.income.push({id:uid(),label:l,amount:amt,ts:Date.now()});set({});}
+  if(kind==='addgoal'){if(demoBlocked('goals'))return;const n=readStr('gl-name'),tg=readNum('gl-target');if(!n||!tg)return;S.goals.push({id:uid(),name:n,target:tg,saved:0,perMonth:0,reaches:''});set({});}
+  if(kind==='adddebt'){if(demoBlocked('debts'))return;const n=readStr('db-name'),bal=readNum('db-bal');if(!n||!bal)return;S.debts.push({id:uid(),name:n,balance:bal,min:readNum('db-min')||0,apr:readNum('db-apr')||0});set({});}
+  if(kind==='addenv'){if(demoBlocked('envelopes'))return;const n=readStr('ev-name'),cap=readNum('ev-cap');if(!n||!cap)return;S.envelopes.push({id:uid(),name:n,cap,spent:0,cat:catFor(n)});set({});}
+  if(kind==='addpay'){if(demoBlocked('paychecks'))return;const n=readStr('pc-name'),amt=readNum('pc-amt');if(!n||!amt)return;S.paychecks.push({id:uid(),name:n,amount:amt,freq:document.getElementById('pc-freq').value,anchor:readStr('pc-anchor')||isoD(addDays(midnight(),14))});set({});}
+}
+function obNext(){
+  if(S.ob===0){S.profile.checking=readNum('ob-check')??0;S.threeThings.balanceSet=true;set({ob:1});}
+  else if(S.ob===1){S.profile.setAside=readNum('ob-aside')??0;set({ob:2});}
+  else if(S.ob===2){const p=readStr('ob-pay');if(!p)return;S.paychecks=[{id:uid(),name:'My pay',amount:0,freq:'biweekly',anchor:p}];set({ob:3});}
+  else{const n=readStr('ob-bill-name'),a=readNum('ob-bill-amt');if(n&&a)S.bills.push({id:uid(),name:n,amount:a,freq:'monthly',dueDom:1,paid:false});S.onboarded=true;S.tab='today';persist();render();}
+}
+function downloadBackup(){const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='budget-planner-backup.json';a.click();URL.revokeObjectURL(u);toast('Backup downloaded');}
+function exportCSV(){const rows=[['date','label','amount']];S.spends.forEach(s=>rows.push([s.ts?isoD(new Date(s.ts)):'',s.label,s.amount]));const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='spending.csv';a.click();URL.revokeObjectURL(u);toast('CSV exported');}
+function restoreBackup(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);S=Object.assign(defaultState(),d);persist();render();toast('Backup restored');}catch(e){toast('Could not read that file');}};r.readAsText(file);}
+
+/* global keyboard: Ctrl/Cmd K */
+window.addEventListener('keydown',(e)=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}if(e.key==='Escape')closePalette();});
+
+/* inline manifest so the single file is installable */
+try{
+  const manifest={name:DEMO?'ADHD Budget Planner (Demo)':'ADHD Budget Planner',short_name:DEMO?'Planner Demo':'Planner',start_url:'.',display:'standalone',background_color:'#f8f7fa',theme_color:'#7659b0',
+    icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" rx="112" fill="#6655a4"/><text x="256" y="352" font-family="Georgia,serif" font-size="300" font-weight="600" fill="#fff" text-anchor="middle">B</text></svg>'),sizes:'512x512',type:'image/svg+xml'}]};
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(blob);document.head.appendChild(link);
+}catch(e){}
+
+render();
+</script>
+</body>
+</html>
