@@ -1,1 +1,2 @@
-ADHD Budget Planner — a calm, phone-first budgeting PWA for ADHD & neurodivergent brains. One number: what's safe to spend today. Bills, paychecks, expenses, debt, savings, envelopes & more — no account, no subscriptio
+ADHD Budget Planner — a calm, phone-first budgeting PWA for ADHD & neurodivergent brains. One number: what's safe to spend today. Bills, paychecks, expenses, debt, savings, envelopes & more — no account, no subscription.
+
