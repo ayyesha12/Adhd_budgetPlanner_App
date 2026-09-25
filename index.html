@@ -134,6 +134,16 @@ svg{display:block;}
 .banner .acts .b1{background:var(--accent);color:#fff;border-radius:var(--r-pill);padding:9px 16px;font-weight:600;font-size:13px;}
 .banner .acts .b2{background:#fff;border:1px solid #ece0b4;border-radius:var(--r-pill);padding:9px 16px;font-weight:600;font-size:13px;color:#5a4e22;}
 .banner .x{margin-left:6px;color:#8a7a3c;padding:4px;}
+.banner.backup-nudge{background:var(--card);border-bottom:1px solid var(--line-rail);color:var(--ink-soft);}
+.banner.backup-nudge .msg{display:flex;align-items:center;gap:8px;}
+.banner.backup-nudge .msg b{color:var(--ink);}
+.banner.backup-nudge .acts .b2{background:var(--accent);color:#fff;border:none;}
+.banner.backup-nudge .x{color:var(--ink-muted);}
+.theme-toggle.backup-btn:hover{color:var(--accent-text);}
+.app-foot{margin-top:28px;padding:20px 26px 40px;border-top:1px solid var(--line-rail);text-align:center;font-size:12.5px;color:var(--ink-muted);line-height:1.7;}
+.app-foot a{color:var(--accent-text);font-weight:600;text-decoration:none;}
+.app-foot a:hover{text-decoration:underline;}
+@media (max-width:760px){.app-foot{padding:18px 16px 32px;}}
 .head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:26px 30px 6px;flex-wrap:wrap;}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);font-weight:600;margin-bottom:4px;}
 .h1{font-family:var(--font-display);font-weight:500;font-size:40px;line-height:1.05;letter-spacing:-.01em;color:var(--ink-display);}
@@ -608,6 +618,7 @@ function Head(eyebrow,title,sub,actions){
     <div class="head-r">
       ${DEMO?`<a class="demo-badge" href="${UPGRADE_URL}" target="_blank" rel="noopener">✦ Get the full app</a>`:''}
       <button class="qa" data-a="palette">${ICON(IC.qa,15)} Quick actions <kbd>Ctrl K</kbd></button>
+      <button class="theme-toggle backup-btn" data-a="backup" title="Back up your data" aria-label="Download a backup of your data">${ICON(IC.download,17)}</button>
       <button class="theme-toggle" data-a="themetoggle" title="Light / dark mode" aria-label="Toggle light or dark mode">${(S.theme||'light')==='dark'?ICON(IC.sun,17):ICON(IC.moon,17)}</button>
       <button class="help-toggle ${S.help?'on':''}" data-a="help" title="Help mode">?</button>
       ${actions||''}
@@ -616,6 +627,12 @@ function Head(eyebrow,title,sub,actions){
 }
 const qm=`<span class="qm">?</span>`;
 const helpNote=(t)=>`<div class="help-note">${t}</div>`;
+const SHOP_URL='https://thedigitalgoldmineco.etsy.com';
+const SHOP_NAME='The Digital Goldmine Co';
+function Footer(){
+  const yr=new Date().getFullYear();
+  return `<footer class="app-foot">© ${yr} <a href="${SHOP_URL}" target="_blank" rel="noopener">${SHOP_NAME}</a> · <a href="${SHOP_URL}" target="_blank" rel="noopener">Visit our Etsy shop</a> · A budgeting tool, not financial advice.</footer>`;
+}
 
 /* ============ welcome tour (Skip / Next) ============ */
 function tourSteps(){
@@ -1060,6 +1077,16 @@ function Onboarding(){
 }
 
 /* ============ render ============ */
+function backupNudge(){
+  if(!S.onboarded||S.example||!S.tourDone)return'';
+  const has=(S.spends&&S.spends.length)||(S.bills&&S.bills.length)||(S.income&&S.income.length)||(S.goals&&S.goals.length)||(S.debts&&S.debts.length);
+  if(!has)return'';
+  const now=Date.now();
+  if(S.backupSnooze&&now-S.backupSnooze<7*DAY)return'';
+  if(S.lastBackup&&now-S.lastBackup<14*DAY)return'';
+  const msg=S.lastBackup?`It's been a couple of weeks since your last backup.`:`Keep your numbers safe.`;
+  return `<div class="banner backup-nudge"><div class="msg">${ICON(IC.download,15)} <b>${msg}</b> Save a quick backup file so nothing's lost if your browser ever clears its data.</div><div class="acts"><button class="b2" data-a="backup">Back up now</button><button class="x" data-a="snooze-backup" title="Remind me later" aria-label="Remind me later">✕</button></div></div>`;
+}
 function render(){
   document.documentElement.setAttribute('data-theme',S.theme||'light');
   document.body.classList.toggle('help-on',!!S.help);
@@ -1068,7 +1095,7 @@ function render(){
   const screens={today:Today,planner:Planner,bills:Bills,income:MoneyIn,goals:Goals,debt:Debt,envelopes:Envelopes,milestones:Milestones,settings:Settings};
   if(!screens[S.tab])S.tab='today';
   const banner=(S.example&&!S.bannerHidden)?`<div class="banner"><div class="msg"><b>Using example numbers</b> — these are made up, so you can safely explore the rent, goals and balance.</div><div class="acts"><button class="b1" data-a="keep-example">Keep exploring the example</button><button class="b2" data-a="use-mine">Use my numbers</button><button class="x" data-a="hide-banner">✕</button></div></div>`:'';
-  root.innerHTML=`<div id="app">${LeftRail()}<main class="main">${banner}${MobMonthRail()}${screens[S.tab]()}${MobNav()}</main>${MonthRail()}</div>${(!S.tourDone)?Tour():''}`;
+  root.innerHTML=`<div id="app">${LeftRail()}<main class="main">${banner}${backupNudge()}${MobMonthRail()}${screens[S.tab]()}${Footer()}${MobNav()}</main>${MonthRail()}</div>${(!S.tourDone)?Tour():''}`;
   bind();
   const _mb=document.querySelector('.mobmonths');
   if(_mb){const _c=_mb.querySelector('.mchip.cur');if(_c)_mb.scrollLeft=_c.offsetLeft-_mb.clientWidth/2+_c.clientWidth/2;}
@@ -1161,6 +1188,7 @@ function bind(){
       case 'hide-banner':set({bannerHidden:true});break;
       case 'use-mine':{S=defaultState();persist();render();break;}
       case 'backup':downloadBackup();break;
+      case 'snooze-backup':set({backupSnooze:Date.now()});break;
       case 'csv':exportCSV();break;
       case 'erase':{if(confirm('Erase everything on this device? No undo — download a backup first.')){S=defaultState();try{localStorage.removeItem(KEY);}catch(_){}mem=null;render();}break;}
       case 'ob-next':obNext();break;
@@ -1187,9 +1215,9 @@ function obNext(){
   else if(S.ob===2){const p=readStr('ob-pay');if(!p)return;S.paychecks=[{id:uid(),name:'My pay',amount:0,freq:'biweekly',anchor:p}];set({ob:3});}
   else{const n=readStr('ob-bill-name'),a=readNum('ob-bill-amt');if(n&&a)S.bills.push({id:uid(),name:n,amount:a,freq:'monthly',dueDom:1,paid:false});S.onboarded=true;S.tab='today';persist();render();}
 }
-function downloadBackup(){const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='budget-planner-backup.json';a.click();URL.revokeObjectURL(u);toast('Backup downloaded');}
+function downloadBackup(){const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='budget-planner-backup.json';a.click();URL.revokeObjectURL(u);S.lastBackup=Date.now();S.backupSnooze=0;persist();render();toast('Backup saved to your device');}
 function exportCSV(){const rows=[['date','label','amount']];S.spends.forEach(s=>rows.push([s.ts?isoD(new Date(s.ts)):'',s.label,s.amount]));const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='spending.csv';a.click();URL.revokeObjectURL(u);toast('CSV exported');}
-function restoreBackup(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);S=Object.assign(defaultState(),d);persist();render();toast('Backup restored');}catch(e){toast('Could not read that file');}};r.readAsText(file);}
+function restoreBackup(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);S=Object.assign(defaultState(),d);S.lastBackup=Date.now();persist();render();toast('Backup restored');}catch(e){toast('Could not read that file');}};r.readAsText(file);}
 
 /* global keyboard: Ctrl/Cmd K */
 window.addEventListener('keydown',(e)=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}if(e.key==='Escape')closePalette();});
